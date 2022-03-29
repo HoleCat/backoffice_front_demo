@@ -1,0 +1,46 @@
+<mat-form-field class="w-full px-2">
+  <input class="w-full" matInput placeholder="Buscar usuario" #input>
+</mat-form-field>
+<mat-divider></mat-divider>
+<div class="mat-elevation-z8 relative">
+  <button (click)="_create_example()" mat-mini-fab class="absolute" style="bottom: -25px;" color="warn" aria-label="Example icon button with a home icon">
+    <mat-icon>add</mat-icon>
+  </button>
+  <div class="w-full">
+    <div class="mx-auto w-full text-center bg-green-200 p-3" *ngIf="dataSource.loading$ | async">
+      <mat-spinner [diameter]="20" class="mx-auto"></mat-spinner>
+    </div>
+    <table mat-table class="full-width-table" matSort aria-label="Elements" [dataSource]="dataSource">
+      <ng-container matColumnDef="_id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+        <td mat-cell *matCellDef="let row">
+          <div class="flex p-2"> 
+            <button mat-raised-button color="warn" (click)="delete_example(row._id)"><mat-icon>delete</mat-icon></button>
+          <span class="w-4"></span>
+          <button mat-raised-button color="primary" (click)="show_example(row._id)"><mat-icon>build</mat-icon></button>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+        <td mat-cell *matCellDef="let row">{{row.email}}</td>
+      </ng-container>
+      <ng-container matColumnDef="password">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Password</th>
+        <td mat-cell *matCellDef="let row">{{row.password}}</td>
+      </ng-container>
+      <ng-container matColumnDef="agree">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Agree</th>
+        <td mat-cell *matCellDef="let row">{{row.agree}}</td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="_change_color($event,row)"></tr>
+    </table>
+    <mat-paginator #paginator
+        [length]="dataSource.count$ | async"
+        [pageIndex]="0"
+        [pageSize]="3"
+        [pageSizeOptions]="[1, 2, 3, 5]">
+    </mat-paginator>
+  </div>
+</div>

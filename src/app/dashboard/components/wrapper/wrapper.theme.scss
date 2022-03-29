@@ -1,0 +1,53 @@
+@import '~@angular/material/theming';
+
+@mixin app-wrapper-theme($theme) {
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+    $color-config:    mat-get-color-config($theme);
+    $primary-palette: map-get($color-config, primary);
+    $accent-palette:  map-get($color-config, accent);
+    $warn-palette:    map-get($color-config, warn);
+    $is-dark-theme:   map-get($color-config, is-dark);
+    app-wrapper {
+        background-color: mat-color($background, background);
+        color: mat-color($foreground, text);
+    }
+    .bg-theme {
+        background-color: mat-color($background, background);
+        color: mat-color($foreground, text);
+    }
+    .bg-primary {
+        background-color: mat-color($primary-palette);
+        color: mat-color($foreground, text);
+    }
+    .bg-accent {
+        background-color: mat-color($accent-palette);
+        color: mat-color($foreground, text);
+    }
+    .bg-warn {
+        background-color: mat-color($warn-palette);
+        color: mat-color($foreground, text);
+    }
+    .ant-menu {
+        background-color: mat-color($primary-palette) !important;
+        color: mat-color($foreground, text) !important;
+    }
+    
+    .ant-layout-header {
+        background-color: mat-color($primary-palette) !important;
+        color: mat-color($foreground, text) !important;
+    }
+    
+    .ant-layout-sider {
+        background-color: mat-color($primary-palette) !important;
+        color: mat-color($foreground, text) !important;
+    }
+
+    .ant-menu-item a:hover {
+        color: mat-color($foreground, text) !important;
+    }
+
+    .ant-menu-item-active, .ant-menu-item-selected, .ant-menu-item-selected a, .ant-menu-item-selected a:hover, .ant-menu-item:hover, .ant-menu-item>.ant-badge a:hover, .ant-menu-submenu-active, .ant-menu-submenu-title:hover, .ant-menu:not(.ant-menu-inline) .ant-menu-submenu-open { 
+        color: mat-color($foreground, text) !important;
+    }
+}

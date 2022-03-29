@@ -1,0 +1,48 @@
+<ng-container>
+    <mat-toolbar class="bg-transparent absolute" style="z-index: 2;" [ngClass]="{'light-theme':dark==false,'dark-theme':dark==true}">
+        <div class="flex p-3" (click)="drawer.toggle()">
+        <mat-icon color="primary" mat-list-icon class="chevron-button side-nav-button" [ngClass]="{'rotated': !isCollapsed}">menu</mat-icon>
+        </div>
+        <span class="spacer"></span>
+        <div class="flex p-3">
+        <mat-slide-toggle (change)="change_dark(!dark)"><mat-icon color="primary" mat-list-icon class="chevron-button side-nav-button">dark_mode</mat-icon></mat-slide-toggle>
+        </div>
+    </mat-toolbar>  
+
+    <mat-sidenav-container class="example-container" [ngClass]="{'light-theme':dark==false,'dark-theme':dark==true}">
+        <mat-sidenav
+        class="example-sidenav bg-theme"
+        [fixedInViewport]="true"
+        [fixedTopGap]="0"
+        [fixedBottomGap]="0"
+        #drawer
+        [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+        [mode]="(isHandset$ | async) ? 'over' : 'push'"
+        [opened]="false">
+        <mat-toolbar></mat-toolbar>
+        <mat-nav-list>
+            <a *ngFor="let link of links" mat-list-item (click)='go_to(link.link);drawer.toggle()'>
+            {{link.description}}
+            <mat-icon mat-list-icon>video</mat-icon>
+            </a>
+        </mat-nav-list>
+        </mat-sidenav>
+
+        <mat-sidenav-content [ngClass]="{'light-theme':dark==false,'dark-theme':dark==true}">
+        <div class="w-full h-screen p-0 m-0 bg-theme">
+            <div class="bg-theme w-full mx-auto h-full rounded-xl">
+                <app-cover-section id="inicio"></app-cover-section>
+                <app-parallax-section id="Parallax"></app-parallax-section>
+                <app-presentation-section id="presentacion"></app-presentation-section>
+                <app-gallery-section id="galeria"></app-gallery-section>
+                <app-about-us-section id="nosotros"></app-about-us-section>
+                <app-horizontal-gallery-section id="galeriados"></app-horizontal-gallery-section>
+                <app-news-section id="noticias"></app-news-section>
+                <app-projects-section id="proyectos"></app-projects-section>
+                <app-contact-section id="contacto"></app-contact-section>
+                <!-- <router-outlet></router-outlet> -->
+            </div>
+        </div>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+</ng-container>

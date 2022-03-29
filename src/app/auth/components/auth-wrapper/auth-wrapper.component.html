@@ -1,0 +1,8 @@
+<div class="flex flex-center h-full p-3 items-center"  [ngClass]="{'light-theme':dark==true,'dark-theme':dark==false}">
+    <div class="mx-auto bg-theme p-3 mat-elevation-z8 h-fit md:h-fit w-full md:w-1/3 px-2" style="border-radius: 10px;">
+        <router-outlet></router-outlet>
+    </div>
+    <div>
+        <button mat-raised-button (click)="dark=!dark">dark</button>
+    </div>
+</div>

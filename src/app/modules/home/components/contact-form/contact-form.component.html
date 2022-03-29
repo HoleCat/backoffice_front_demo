@@ -1,0 +1,58 @@
+<form [formGroup]="myForm" class="flex flex-col p-4" [hidden]="success" (ngSubmit)="submitHandler()">
+    <mat-form-field appearance="outline" class="px-1">
+        <input matInput placeholder="email" formControlName="email">
+        <mat-error *ngIf="email.invalid && email.touched">
+            Correo invalido
+        </mat-error>
+    </mat-form-field>
+    
+    <div class="md:grid md:grid-cols-2">
+        <div class="w-full px-1">
+            <mat-form-field appearance="outline" class="w-full">
+                <input matInput type="name" placeholder="Nombres" formControlName="name">
+                <mat-hint align="end">nombres</mat-hint>
+                <mat-error *ngIf="name.invalid && name.touched">
+                    Campo obligatorio
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="w-full px-1">
+            <mat-form-field appearance="outline" class="w-full">
+                <input matInput type="lastname" placeholder="Apellidos" formControlName="lastname">
+                <mat-hint align="end">apellidos</mat-hint>
+                <mat-error *ngIf="lastname.invalid && lastname.touched">
+                    Campo obligatorio
+                </mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+    
+    <mat-form-field appearance="outline" class="px-1">
+        <input matInput placeholder="dni" formControlName="dni">
+        <mat-hint align="end">Documento de identidad</mat-hint>
+        <mat-error *ngIf="dni.invalid && dni.touched">
+            Documento invalido
+        </mat-error>
+        <mat-error *ngIf="dni.errors?.minlength && dni.touched">
+            Minimo son 8 digitos
+        </mat-error>
+        <mat-error *ngIf="dni.errors?.maxlength && dni.touched">
+            Maximo son 10 digitos
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="px-1">
+        <input matInput placeholder="telefono" formControlName="phone">
+        <mat-hint align="end">Telefono</mat-hint>
+        <mat-error *ngIf="dni.invalid && dni.touched">
+            El telefono es un campo obligatorio
+        </mat-error>
+    </mat-form-field>
+    <mat-checkbox formControlName="agree" color="warn">Aceptas las condiciones?</mat-checkbox>
+    <br>
+    <br>
+    <button mat-raised-button type="submit" [disabled]="myForm.invalid" color="warn">{{btn_text}}</button>
+</form>
+
+<div *ngIf="success" class="notification is-success">
+    Yay todo nice !!
+</div>

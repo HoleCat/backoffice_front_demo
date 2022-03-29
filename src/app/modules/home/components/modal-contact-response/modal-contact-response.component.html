@@ -1,0 +1,12 @@
+<div [ngClass]="{'light-theme':dark==false,'dark-theme':dark==true}" class="bg-theme">
+    <div mat-dialog-content class="bg-theme" style="padding: 50px 55px;">
+        <p mat-dialog-title class="text-5xl">Hola {{data.name}}</p>
+        <div>
+            <p class="text-base">Gracias por contactar con Asia Campo un asesor se comunicara contigo pronto.</p>
+            </div>
+            <div mat-dialog-actions>
+            <!-- <button mat-button (click)="onNoClick()">No Thanks</button> -->
+            <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+        </div>
+    </div>
+</div>

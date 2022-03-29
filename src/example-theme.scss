@@ -1,0 +1,35 @@
+@import '~@angular/material/theming';
+@import './app/dashboard/components/wrapper/wrapper.theme.scss';
+@import './app/auth/components/auth-wrapper/auth-wrapper.theme.scss';
+@import './app/modules/example-module/components/example-wrapper/example-wrapper.theme.scss';
+@import './app/modules/home/components/wrapper/home-wrapper.theme.scss';
+@import './app/modules/home/components/modal-contact-response/modal-contact-response-theme.scss';
+
+@include mat-core();
+$my-theme-light-primary: mat-palette($mat-green, 300);
+$my-theme-light-accent: mat-palette($mat-teal, A200);
+$my-theme-light-warn: mat-palette($mat-blue);
+
+$my-theme-dark-primary: mat-palette($mat-blue, 100);
+$my-theme-dark-accent: mat-palette($mat-blue, A400);
+$my-theme-dark-warn: mat-palette($mat-yellow);
+
+$my-theme-light: mat-light-theme($my-theme-light-primary,$my-theme-light-accent,$my-theme-light-warn);
+$my-theme-dark: mat-dark-theme($my-theme-dark-primary,$my-theme-dark-accent,$my-theme-dark-warn);
+
+@include angular-material-theme($my-theme-light);
+
+@mixin custom-theme($theme) {
+    @include angular-material-theme($theme);
+    @include app-wrapper-theme($theme);
+    @include app-example-wrapper-theme($theme);
+    @include app-auth-wrapper-theme($theme);
+    @include app-modal-contact-response-theme($theme);
+}
+
+.light-theme{
+    @include custom-theme($my-theme-light);
+}
+.dark-theme{
+    @include custom-theme($my-theme-dark);
+}

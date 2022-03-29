@@ -1,0 +1,37 @@
+<div class="flex bg-theme w-full items-center relative md:p-4 flex flex-col md:min-h-screen" style="flex-flow: wrap;">
+    <div class="gallery absolute" style="top: 0px; bottom: 0px; right: 0px; left: 0px;">
+        <img src="{{file.path}}" class="w-full h-full" style="object-fit: cover;" [ngClass]="{'block':file.active==true,'hidden':file.active==false}" alt=""  *ngFor="let file of files; index as i;">
+    </div>
+    <div class="w-full flex flex-wrap">
+        <div class="w-full flex items-center flex-col md:flex-row flex-wrap">
+            <div class="w-full md:w-2/5 px-4 pt-4 md:p-4" style="z-index: 1;">
+                <p class="text-xl md:text-5xl">Lo que buscamos</p>
+                <p class="pt-4 text-base">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Veritatis quo est fugiat exercitationem nihil culpa quidem deserunt, fuga omnis alias deleniti velit impedit recusandae aliquid dignissimos quam. Et, minus adipisci.</p>
+            </div>
+            <div class="w-full md:w-3/5 flex flex-col">
+                <div class="relative w-48 h-48 md:w-52 p-1 flex flex-col">
+                    <img src="#" alt="" style="border-radius: 50%;" class="w-full h-full bg-primary">
+                </div>
+                <div class="relative w-48 h-48 md:w-52 p-1 flex flex-col" style="margin-top: -50px;">
+                    <img src="#" alt="" style="border-radius: 50%;" class="w-full h-full bg-warn">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="w-full flex justify-start items-center py-2" style="z-index: 1;">
+        <div class="flex flex-row items-center my-1">
+            <div class="flex items-center flex-row" alt=""  *ngFor="let file of files; index as i;">
+                <div 
+                matRipple
+                [matRippleCentered]="false"
+                [matRippleDisabled]="false"
+                [matRippleUnbounded]="false"
+                [matRippleRadius]="25"
+                style="max-height: 25px;max-width: 25px;min-height: 25px;min-width: 25px;border-radius: 25px;" (click)="change_file(i)" class="m-1 rounded" [ngClass]="{'bg-warn':file.active==true,'bg-primary':file.active==false}"></div>
+                <div class="flex items-center">
+                    <p class="text-base md:text-xs" style="margin: 0px !important;"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
