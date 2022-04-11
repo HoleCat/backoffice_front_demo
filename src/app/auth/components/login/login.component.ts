@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
   selector: 'app-login',
@@ -12,8 +11,7 @@ export class LoginComponent implements OnInit {
 
   constructor
   (
-    private fb: FormBuilder,
-    private userService: UserService
+    private fb: FormBuilder
   ) { }
 
   ngOnInit(): void {
@@ -62,14 +60,14 @@ export class LoginComponent implements OnInit {
     console.log('zxczxczxcxz');
     this.loading = true;
     const formValue = this.myForm.value;
-    this.userService.sign_up(formValue).subscribe(
-      response => {
-        console.log(response);
-        this.loading = false;
-      },
-      error => {
-        console.log(error);
-      }
-    );
+    // this.userService.sign_up(formValue).subscribe(
+    //   response => {
+    //     console.log(response);
+    //     this.loading = false;
+    //   },
+    //   error => {
+    //     console.log(error);
+    //   }
+    // );
   }
 }

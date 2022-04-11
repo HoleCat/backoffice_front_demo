@@ -1,0 +1,33 @@
+<mat-sidenav-container class="sidenav-container" autosize>
+  <!--[opened]="(isHandset$ | async) === false"-->
+  <mat-sidenav #drawer class="sidenav" fixedInViewport
+      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+      [mode]="(isHandset$ | async) ? 'over' : 'side'">
+    <mat-toolbar>
+      <div class="flex items-center spin-place w-full relative p-3 h-16">
+        <span class="h-full w-full flex items-center" (click)="open()">
+          <mat-icon color="primary" mat-list-icon class="chevron-button side-nav-button" [ngClass]="{'rotated': !isCollapsed}">chevron_right</mat-icon>
+        </span>
+      </div>
+    </mat-toolbar>
+    <mat-nav-list>
+      <a mat-list-item routerLink="navItem.route" *ngFor="let navItem of navItemList">
+        <mat-icon color="primary" mat-list-icon>{{navItem.icon}}</mat-icon>
+        {{isCollapsed ? navItem.text : ''}}
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="drawer.toggle()">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <span>goodangular</span>
+    </mat-toolbar>
+    <ng-content></ng-content>
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,9 +1,9 @@
 @import '~@angular/material/theming';
-@import './app/dashboard/components/wrapper/wrapper.theme.scss';
+
 @import './app/auth/components/auth-wrapper/auth-wrapper.theme.scss';
-@import './app/modules/example-module/components/example-wrapper/example-wrapper.theme.scss';
-@import './app/modules/home/components/wrapper/home-wrapper.theme.scss';
-@import './app/modules/home/components/modal-contact-response/modal-contact-response-theme.scss';
+@import './app/features/example-module/components/example-wrapper/example-wrapper.theme.scss';
+@import './app/features/home/components/wrapper/home-wrapper.theme.scss';
+@import './app/features/home/components/modal-contact-response/modal-contact-response-theme.scss';
 
 @include mat-core();
 $my-theme-light-primary: mat-palette($mat-green, 300);
@@ -21,7 +21,7 @@ $my-theme-dark: mat-dark-theme($my-theme-dark-primary,$my-theme-dark-accent,$my-
 
 @mixin custom-theme($theme) {
     @include angular-material-theme($theme);
-    @include app-wrapper-theme($theme);
+    
     @include app-example-wrapper-theme($theme);
     @include app-auth-wrapper-theme($theme);
     @include app-modal-contact-response-theme($theme);

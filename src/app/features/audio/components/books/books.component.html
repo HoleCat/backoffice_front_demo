@@ -1,0 +1,85 @@
+<mat-toolbar color="primary">
+    <mat-toolbar-row>
+        <span>Audio App</span>
+        <span class="spacer"></span>
+        <button color="warn" mat-raised-button aria-label="Example icon-button with share icon" (click)="liked = true" *ngIf="liked == false">
+            LIKED <mat-icon>favorite</mat-icon>
+        </button>
+        <button color="warn" mat-raised-button aria-label="Example icon-button with share icon" (click)="liked = false" *ngIf="liked == true">
+            GENERAL <mat-icon>home</mat-icon>
+        </button>
+        <button mat-icon-button aria-label="Example icon-button with share icon">
+            <mat-icon>share</mat-icon>
+        </button>
+    </mat-toolbar-row>
+</mat-toolbar>
+<div class="w-full md:grid md:grid-cols-2" *ngIf="liked == false">
+    <div class="w-full flex items-center px-2 md:px-4 text-center">
+        <p class="w-full text-center">Listen music from our library and one to your liked list to add lines of letters into it</p>
+    </div>
+    <mat-selection-list #shoes [multiple]="false" class="max-h-40 overflow-y-scroll">
+        <mat-list-option *ngFor="let file of files; let i = index" [value]="file" (click)="openFile(file, i)">
+            <div class="w-full flex items-center">
+                <div>{{file.name}}</div>
+                <span class="spacer"></span>
+                <button mat-icon-button class="" aria-label="icon" (click)="store_song(file)">
+                    <mat-icon>favorite</mat-icon>
+                </button>
+            </div>
+        </mat-list-option>
+    </mat-selection-list>
+</div>
+
+<div class="w-full md:grid md:grid-cols-2" *ngIf="liked == true">
+    <div class="flex items-center px-2 md:px-4 text-center">
+        <p class="w-full">{{current_line.text}}</p>
+        <br/>
+        <button *ngIf="liked && current_line.text != ''" (click)="_update_line(current_line)" mat-mini-fab class="absolute" style="bottom: -25px;" color="warn" aria-label="Example icon button with a home icon" [disabled]="state?.error">
+            <mat-icon>edit</mat-icon>
+        </button>
+        <span class="w-5"></span>
+        <button *ngIf="liked && current_line.text != ''" (click)="_destroy_line(current_line)" mat-mini-fab class="absolute" style="bottom: -25px;" color="accent" aria-label="Example icon button with a home icon" [disabled]="state?.error">
+            <mat-icon>delete</mat-icon>
+        </button>
+    </div>
+    <mat-selection-list #las [multiple]="false" class="max-h-40 overflow-y-scroll">
+        <mat-list-option *ngFor="let song of songs; let i = index" [value]="song" (click)="openFile(song, i)">
+            <div class="w-full flex items-center">
+                <div>{{song.name}}</div>
+            </div>
+        </mat-list-option>
+    </mat-selection-list>
+</div>
+<!--<div class="w-full flex items-center text-center">
+    <div class="">{{song.name}}</div>
+    <span class="w-3"></span>
+    <button mat-icon-button class="" aria-label="icon" (click)="store_song(song)">
+        <mat-icon>favorite</mat-icon>
+    </button>
+</div>-->
+<div class="flex flex-wrap w-full items-center justify-center px-2 pt-2 pb-4 bg-theme">
+    <div class="w-full flex items-center">
+        <!--<button mat-icon-button color="warn" (click)="replay()"><mat-icon>replay</mat-icon></button>-->
+        <button mat-icon-button color="warn"><mat-icon>replay</mat-icon></button>
+        <span class="w-2"></span>
+        {{ state?.readableCurrentTime }}
+        <mat-slider color="warn" class="w-full" min="0" [max]="state?.duration" step="1" [value]="state?.currentTime" (input)="onSliderChangeEnd($event)" [disabled]="state?.error || currentFile.index === undefined"></mat-slider>
+        {{ state?.readableDuration }}
+    </div>
+    <br class="w-full">
+    <button mat-fab color="primary" [disabled]="state?.error" *ngIf="!state?.playing" (click)="play()"><mat-icon>play_arrow</mat-icon></button>
+    <span class="w-2"></span>
+    <button mat-fab color="accent" *ngIf="state?.playing" (click)="pause()"><mat-icon>pause</mat-icon></button>
+    <span class="w-2"></span>
+    <button mat-fab color="warn" (click)="stop()"><mat-icon>stop</mat-icon></button>
+    <span class="w-full sm:w-2 h-3"></span>
+    <div class="flex items-center">
+        <button *ngIf="mute == false" mat-icon-button color="primary" (click)="_volume_off()"><mat-icon>volume_up</mat-icon></button>
+        <button *ngIf="mute == true" mat-icon-button color="primary" (click)="_volume_on()"><mat-icon>volume_off</mat-icon></button>
+        <span class="w-2"></span>
+        <mat-slider color="primary" class="w-full" min="0" max="1" step="0.01" [value]="0.05" (input)="_set_volume($event)"></mat-slider>
+    </div>
+    <button *ngIf="liked" (click)="_create_line()" mat-mini-fab class="absolute" style="bottom: -25px;" color="primary" aria-label="Example icon button with a home icon" [disabled]="state?.error">
+        <mat-icon>add</mat-icon>
+    </button>
+</div>
