@@ -7,6 +7,7 @@ import { registerLocaleData } from '@angular/common';
 import es from '@angular/common/locales/es';
 import { CoreModule } from './core/core.module';
 import { HttpClientModule } from '@angular/common/http';
+import { interceptorProvider } from './core/interceptors/token.interceptor';
 
 registerLocaleData(es);
 
@@ -21,6 +22,7 @@ registerLocaleData(es);
     HttpClientModule,
     CoreModule
   ],
+  providers: [interceptorProvider],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

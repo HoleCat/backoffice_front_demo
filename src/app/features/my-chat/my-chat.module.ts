@@ -9,6 +9,7 @@ import { DeleteComponent } from './components/delete/delete.component';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { interceptorProvider } from 'src/app/core/interceptors/token.interceptor';
 
 @NgModule({
   declarations: [
