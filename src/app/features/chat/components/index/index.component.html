@@ -1,1 +1,11 @@
+
+<div *ngIf="isLogged; else loggedOut">
+    <h2>Bienvenido {{userName}}</h2>
+</div>
+
+<ng-template #loggedOut>
+    <h2>No has iniciado sesión</h2>
+</ng-template>
+  <!-- <button mat-raised-button color="primary" (click)="product()">Primary</button> -->
+<button mat-raised-button color="primary" *ngIf="isLogged" (click)="onLogOut()">Cerrar sesión</button>
 <p>index works!</p>

@@ -6,7 +6,9 @@ import { IndexComponent } from './components/index/index.component';
 import { CreateComponent } from './components/create/create.component';
 import { ShowComponent } from './components/show/show.component';
 import { DeleteComponent } from './components/delete/delete.component';
-
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,10 @@ import { DeleteComponent } from './components/delete/delete.component';
   ],
   imports: [
     CommonModule,
-    MyChatRoutingModule
+    MyChatRoutingModule,
+    FormsModule,
+    MatInputModule,
+    MatButtonModule
   ]
 })
 export class MyChatModule { }

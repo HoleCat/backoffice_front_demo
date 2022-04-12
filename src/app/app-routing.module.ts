@@ -15,8 +15,8 @@ const routes: Routes = [
     loadChildren: () => import('./pages/default/default.module').then(m => m.DefaultModule)
   },
   {
-    path: 'login',
-    loadChildren: () => import('./pages/login/login.module').then(m => m.LoginModule)
+    path: 'auth',
+    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
   }
 ];
 

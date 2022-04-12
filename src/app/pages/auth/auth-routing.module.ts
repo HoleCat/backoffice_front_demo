@@ -8,12 +8,8 @@ const routes: Routes = [
     component: WrapperComponent,
     children: [
       {
-        path: 'chat',
-        loadChildren: () => import('../../features/chat/chat.module').then(m => m.ChatModule)
-      },
-      {
-        path: 'my-chat',
-        loadChildren: () => import('../../features/my-chat/my-chat.module').then(m => m.MyChatModule)
+        path: '',
+        loadChildren: () => import('../../features/auth/auth.module').then(m => m.AuthModule)
       }
     ]
   }
@@ -23,4 +19,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class DashboardRoutingModule { }
+export class AuthRoutingModule { }

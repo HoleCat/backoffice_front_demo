@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { SignInComponent } from './components/sign-in/sign-in.component';
+import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { WrapperComponent } from './components/wrapper/wrapper.component';
 
 const routes: Routes = [
@@ -8,12 +10,12 @@ const routes: Routes = [
     component: WrapperComponent,
     children: [
       {
-        path: 'chat',
-        loadChildren: () => import('../../features/chat/chat.module').then(m => m.ChatModule)
+        path: 'sign-in',
+        component: SignInComponent
       },
       {
-        path: 'my-chat',
-        loadChildren: () => import('../../features/my-chat/my-chat.module').then(m => m.MyChatModule)
+        path: 'sign-up',
+        component: SignUpComponent
       }
     ]
   }
@@ -23,4 +25,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class DashboardRoutingModule { }
+export class AuthRoutingModule { }
