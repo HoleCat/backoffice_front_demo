@@ -11,7 +11,7 @@
       </div>
     </mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item routerLink="navItem.route" *ngFor="let navItem of navItemList">
+      <a mat-list-item [routerLink]="navItem.route" *ngFor="let navItem of navItemList">
         <mat-icon color="primary" mat-list-icon>{{navItem.icon}}</mat-icon>
         {{isCollapsed ? navItem.text : ''}}
       </a>
