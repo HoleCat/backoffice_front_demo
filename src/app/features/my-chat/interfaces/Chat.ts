@@ -1,9 +1,8 @@
-export interface Message{
-    id_chat: number,
-    message: string,
-    photo: string,
-    path: string,
+export interface Chat{
+    topic: string,
+    description: string,
     id_status: number,
+    id_user: number,
     created_by: number,
     created_at: string,
     updated_by: number,

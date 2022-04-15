@@ -19,7 +19,7 @@ export class IndexComponent implements OnInit {
   
   isLogged = false;
   userName = ''
-  messages: Message[] = [];
+  //messages: Message[] = [];
 
   constructor(
     private tokenService: TokenService,
@@ -31,7 +31,7 @@ export class IndexComponent implements OnInit {
     if (this.tokenService.getToken()) {
       this.isLogged = true;
       this.userName = this.tokenService.getUserName();
-      this.cargarMessage();
+      //this.cargarMessage();
 
       
 
@@ -53,35 +53,35 @@ export class IndexComponent implements OnInit {
     this.client.activate();
   }
 
-  message: Message = {
-    username: this.tokenService.getUserName(),
-    message: "",
-    to_who: ""
-  }
+  // message: Message = {
+  //   username: this.tokenService.getUserName(),
+  //   message: "",
+  //   to_who: ""
+  // }
 
-  chatSubscription: Subscription
-  chatregister(): void{
-    if(this.chatSubscription != undefined) (this.chatSubscription.unsubscribe());
-    this.chatSubscription = this.my_chatService.savechat(this.message).subscribe(
-      (data:any) => {
-        console.log('chat: ', data);
-      },
-      (error:any) => {
-        console.log('chat error : ', error);
-      }
-    );
-  }
+  // chatSubscription: Subscription
+  // chatregister(): void{
+  //   if(this.chatSubscription != undefined) (this.chatSubscription.unsubscribe());
+  //   this.chatSubscription = this.my_chatService.saveMessage(this.message).subscribe(
+  //     (data:any) => {
+  //       console.log('chat: ', data);
+  //     },
+  //     (error:any) => {
+  //       console.log('chat error : ', error);
+  //     }
+  //   );
+  // }
 
-  cargarMessage(): void {
-    this.my_chatService.listMessage(this.tokenService.getUserName()).subscribe(
-      data => {
-        this.messages = data;
-      },
-      err => {
-        console.log(err);
-      }
-    );
-  }
+  // cargarMessage(): void {
+  //   this.my_chatService.listMessage(this.tokenService.getUserName()).subscribe(
+  //     data => {
+  //       this.messages = data;
+  //     },
+  //     err => {
+  //       console.log(err);
+  //     }
+  //   );
+  // }
 
   /*data: ServerForm = {
     server_name: '',

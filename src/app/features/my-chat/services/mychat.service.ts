@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Chat } from '../interfaces/Chat';
 import { Message } from '../interfaces/Message';
 
 @Injectable({
@@ -16,9 +17,27 @@ export class MyChatService {
     return this.httpClient.get<Message[]>(`http://localhost:8092/messages/lista/${username}`);
   }
 
-  savechat(obj:Message):Observable<any>{
+  saveMessage(obj:Message):Observable<any>{
     //here i need to add a post request
-    return this.httpClient.post('http://localhost:8092/messages/create', obj);
+    return this.httpClient.post('http://localhost:8092/message/create', obj);
+  }
+
+
+  //Para chat
+  public listChats(id_user: number): Observable<Chat[]> {
+    return this.httpClient.get<Chat[]>(`http://localhost:8092/chat/list/${id_user}`);
+  }
+
+  public detail(id: number): Observable<Chat> {
+    return this.httpClient.get<Chat>('http://localhost:8092/chat/detail/'+ id);
+  }
+
+  public saveChat(obj: Chat): Observable<any>{
+    return this.httpClient.post('http://localhost:8092/chat/create', obj);
+  }
+
+  public updateChat(id: number, obj: Chat): Observable<any>{
+    return this.httpClient.put('http://localhost:8092/chat/update/' + id, obj);
   }
 
   
