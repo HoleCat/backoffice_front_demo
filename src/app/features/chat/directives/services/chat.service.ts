@@ -18,7 +18,17 @@ export class ChatService {
   //   return this.httpClient.post('http://localhost:8092/chat/create' + obj);
   // }
 
-  saveChat(obj: Chat): Observable<any>{
+  public detail(id: number): Observable<Chat> {
+    return this.httpClient.get<Chat>('http://localhost:8092/chat/detail/'+ id);
+  }
+
+  public saveChat(obj: Chat): Observable<any>{
     return this.httpClient.post('http://localhost:8092/chat/create', obj);
   }
+
+  public updateChat(id: number, obj: Chat): Observable<any>{
+    return this.httpClient.put('http://localhost:8092/chat/update/' + id, obj);
+  }
+
+
 }

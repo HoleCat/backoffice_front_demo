@@ -1,1 +1,48 @@
-<p>show works!</p>
+<form [formGroup]="myForm" class="flex mx-auto flex-col" (ngSubmit)="chatUpdate()" novalidate>
+    <mat-toolbar class="bg-blue-500 w-full">
+        <h4>Create</h4>
+    </mat-toolbar>
+    <br>
+    <mat-form-field appearance="outline">
+        <mat-label>topic</mat-label>
+        <input matInput placeholder="topic" type="text" formControlName="topic" id="topic">
+
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>description</mat-label>
+        <input matInput placeholder="description" type="text" formControlName="description" id="description">
+
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>id_status</mat-label>
+        <input matInput placeholder="id_status" type="text" formControlName="id_status" id="id_status">
+
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>id_user</mat-label>
+        <input matInput placeholder="id_user" type="text" formControlName="id_user" id="id_user">
+
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>created_by</mat-label>
+        <input matInput placeholder="created_by" type="text" formControlName="created_by" id="created_by">
+
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>created_at</mat-label>
+        <input matInput placeholder="created_at" type="text" formControlName="created_at" id="created_at">
+
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>updated_by</mat-label>
+        <input matInput placeholder="updated_by" type="text" formControlName="updated_by" id="updated_by">
+
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>updated_at</mat-label>
+        <input matInput placeholder="updated_at" type="text" formControlName="updated_at" id="updated_at">
+
+    </mat-form-field>
+    
+    <button mat-raised-button color="primary" type="submit" [disabled]="myForm.invalid">registrar chat</button>
+</form>
