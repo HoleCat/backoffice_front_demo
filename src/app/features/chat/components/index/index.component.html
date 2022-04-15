@@ -2,7 +2,7 @@
 <div *ngIf="isLogged; else loggedOut">
     <h2>Bienvenido {{userName}}</h2>
     <div>
-      <button mat-raised-button color="primary" routerLink="./create">Nuevo chat</button>
+      <button mat-raised-button color="primary" routerLink="/dashboard/chat/create">Nuevo chat</button>
     </div>
     <table class="table table-dark">
       <thead>
@@ -29,6 +29,7 @@
           <td>{{chat.created_at}}</td>
           <td>{{chat.updated_by}}</td>
           <td>{{chat.updated_at}}</td>
+          <td><button class="btn btn-outline-warning" routerLink="/dashboard/chat/show/{{chat.id}}"><i class="far fa-edit"></i>Editar</button></td>
         </tr>
       </tbody>
     </table> 

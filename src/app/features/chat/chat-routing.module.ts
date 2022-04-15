@@ -24,7 +24,7 @@ const routes: Routes = [
         component: DeleteComponent
       },
       {
-        path: 'show',
+        path: 'show/:id',
         component: ShowComponent
       }
     ]

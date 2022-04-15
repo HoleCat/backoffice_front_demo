@@ -22,30 +22,82 @@ export class CreateComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
+    this.myForm = this.fb.group({
+      
+      topic: [
+        'hola amigos',
+        [
+          Validators.required
+        ]
+      ],
+      description: [
+        'whatever',
+        [
+          Validators.required
+        ]
+      ],
+      id_status: [
+        '1',
+        [
+          Validators.required
+        ]
+      ],
+      id_user: [
+        '1',
+        [
+          Validators.required
+        ]
+      ],
+      created_by: [
+        '1',
+        [
+          Validators.required
+        ]
+      ],
+      created_at: [
+        '2022-04-02T02:50:12.208Z',
+        [
+          Validators.required
+        ]
+      ],
+      updated_by: [
+        '1',
+        [
+          Validators.required
+        ]
+      ],
+      updated_at: [
+        '2022-04-02T02:50:12.208Z',
+        [
+          Validators.required
+        ]
+      ]
+    });
   }
 
-  chat: Chat = {
-    topic: "hola",
-    description: "hola",
-    id_status: 1,
-    id_user: 1,
-    created_by: 1,
-    created_at: "2022-04-02T02:50:12.208Z",
-    updated_by: 1,
-    updated_at: "2022-04-02T02:50:12.208Z"
-  }
+  get topic() { return this.myForm.get('topic');}
+  get description() { return this.myForm.get('description');}
+  get id_status() { return this.myForm.get('id_status');}
+  get id_user() { return this.myForm.get('id_user');}
+  get created_by() { return this.myForm.get('created_by');}
+  get created_at() { return this.myForm.get('created_at');}
+  get updated_by() { return this.myForm.get('updated_by');}
+  get updated_at() { return this.myForm.get('updated_at');}
+
 
   contactSubscription: Subscription
   chatregister(): void{
     if(this.contactSubscription != undefined) (this.contactSubscription.unsubscribe());
-    this.contactSubscription = this.chatService.saveChat(this.chat).subscribe(
+    this.contactSubscription = this.chatService.saveChat(this.myForm.value).subscribe(
       (data:any) => {
-        console.log('chat error : ', data);
+        console.log('chat registrado : ', data);
+        this.router.navigate(["./dashboard/chat/index"])
       },
       (error:any) => {
         console.log('chat error : ', error);
       }
     );
   }
-  
+
 }

@@ -1,34 +1,65 @@
-<!--<form [formGroup]="myForm" class="flex mx-auto flex-col">
+<form [formGroup]="myForm" class="flex mx-auto flex-col" (ngSubmit)="chatregister()" novalidate>
     <mat-toolbar class="bg-blue-500 w-full">
         <h4>Create</h4>
     </mat-toolbar>
     <br>
-{{ myForm.value | json }}
+      {{ myForm.value | json }}
     <mat-form-field appearance="outline">
-        <mat-label>Username</mat-label>
-        <input matInput placeholder="userName">
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-        <mat-label>Password</mat-label>
-        <input matInput type="password" placeholder="password">
-        <mat-hint align="end">Debe tener letras y numeros</mat-hint>
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-        <mat-label>Dni</mat-label>
-        <input matInput placeholder="dni" formControlName="dni">
-        <mat-hint align="end">Documento de identidad</mat-hint>
-        <mat-error *ngIf="dni.invalid && dni.touched">
-            Documento invalido
-        </mat-error>
-        <mat-error *ngIf="dni.errors?.minlength && dni.touched">
-            Minimo son 8 digitos
-        </mat-error>
-        <mat-error *ngIf="dni.errors?.maxlength && dni.touched">
-            Maximo son 10 digitos
+        <mat-label>topic</mat-label>
+        <input matInput placeholder="topic" type="text" formControlName="topic" id="topic">
+        <mat-error *ngIf="topic.invalid && topic.touched">
+            Campo obligatorio
         </mat-error>
     </mat-form-field>
-    <mat-checkbox class="mx-auto" formControlName="agree" color="primary">Aceptas las condiciones?</mat-checkbox>
-    </form>
--->
-    <br>
-    <button mat-raised-button color="primary" (click)="chatregister()">registrar chat</button>
+    <mat-form-field appearance="outline">
+        <mat-label>description</mat-label>
+        <input matInput placeholder="description" type="text" formControlName="description" id="description">
+        <mat-error *ngIf="description.invalid && description.touched">
+            Campo obligatorio
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>id_status</mat-label>
+        <input matInput placeholder="id_status" type="text" formControlName="id_status" id="id_status">
+        <mat-error *ngIf="id_status.invalid && id_status.touched">
+            Campo obligatorio
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>id_user</mat-label>
+        <input matInput placeholder="id_user" type="text" formControlName="id_user" id="id_user">
+        <mat-error *ngIf="id_user.invalid && id_user.touched">
+            Campo obligatorio
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>created_by</mat-label>
+        <input matInput placeholder="created_by" type="text" formControlName="created_by" id="created_by">
+        <mat-error *ngIf="created_by.invalid && created_by.touched">
+            Campo obligatorio
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>created_at</mat-label>
+        <input matInput placeholder="created_at" type="text" formControlName="created_at" id="created_at">
+        <mat-error *ngIf="created_at.invalid && created_at.touched">
+            Campo obligatorio
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>updated_by</mat-label>
+        <input matInput placeholder="updated_by" type="text" formControlName="updated_by" id="updated_by">
+        <mat-error *ngIf="updated_by.invalid && updated_by.touched">
+            Campo obligatorio
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>updated_at</mat-label>
+        <input matInput placeholder="updated_at" type="text" formControlName="updated_at" id="updated_at">
+        <mat-error *ngIf="updated_at.invalid && updated_at.touched">
+            Campo obligatorio
+        </mat-error>
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit" [disabled]="myForm.invalid">registrar chat</button>
+</form>
+   
