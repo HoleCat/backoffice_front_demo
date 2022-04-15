@@ -15,13 +15,13 @@ export class SidenavComponent {
     {
       id: 1,
       text: 'Chats',
-      route: '/dashboard/chat/index',
+      route: '/chat/index',
       icon: 'person'
     },
     {
       id: 2,
       text: 'Mis chats',
-      route: '/dashboard/my-chat/index',
+      route: '/my-chat/index',
       icon: 'home'
     },
     {
