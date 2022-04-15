@@ -1,5 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { TokenService } from 'src/app/core/services/token.service';
+import { Chat } from '../../directives/interfaces/Chat';
+import { ChatService } from '../../directives/services/chat.service';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-index',
@@ -8,10 +13,15 @@ import { TokenService } from 'src/app/core/services/token.service';
 })
 export class IndexComponent implements OnInit {
 
+  //LISTBYID_USER
+  chats: Chat[] = [];
+  
+  //LOGGEO
   isLogged = false;
   userName = ''
 
   constructor(
+    private chatService: ChatService,
     private tokenService : TokenService
   ) { }
 
@@ -20,12 +30,25 @@ export class IndexComponent implements OnInit {
 
     //cuando estes logueado o no
     if (this.tokenService.getToken()) {
+      this.cargarChats();
+      
       this.isLogged = true;
       this.userName = this.tokenService.getUserName();
     } else {
       this.isLogged = false;
       this.userName = '';
     }
+  }
+
+  cargarChats(): void {
+    this.chatService.listChats(1).subscribe(
+      data => {
+        this.chats = data;
+      },
+      err => {
+        console.log(err);
+      }
+    );
   }
 
   //DESLOGEARSE

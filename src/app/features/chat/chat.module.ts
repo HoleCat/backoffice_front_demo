@@ -7,7 +7,11 @@ import { IndexComponent } from './components/index/index.component';
 import { ShowComponent } from './components/show/show.component';
 import { CreateComponent } from './components/create/create.component';
 import { DeleteComponent } from './components/delete/delete.component';
-
+import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -19,7 +23,12 @@ import { DeleteComponent } from './components/delete/delete.component';
   ],
   imports: [
     CommonModule,
-    ChatRoutingModule
+    ChatRoutingModule,
+    MatButtonModule,
+    MatTableModule,
+    MatToolbarModule,
+    ReactiveFormsModule,
+    MatInputModule
   ]
 })
 export class ChatModule { }

@@ -29,7 +29,7 @@ export class AuthGuard implements CanActivate {
       }); 
 
       if(!this.tokenService.getToken() || expectedRol.indexOf(this.realRol) === -1){
-          this.router.navigate(['/']);
+          this.router.navigate(['/auth']);
           return false;
       }
     return true;

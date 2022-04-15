@@ -16,10 +16,7 @@ export class IndexComponent implements OnInit {
   
   //para sockjs
   private client: Client;
-
-
-
-
+  
   isLogged = false;
   userName = ''
   messages: Message[] = [];
@@ -31,28 +28,29 @@ export class IndexComponent implements OnInit {
 
   ngOnInit(): void {
     //cuando estes logueado o no
-    //if (this.tokenService.getToken()) {
+    if (this.tokenService.getToken()) {
       this.isLogged = true;
       this.userName = this.tokenService.getUserName();
       this.cargarMessage();
 
-    //} else {
-      //this.isLogged = false;
-      //this.userName = '';
-    //}
-
-          // //para socketjs
-          // this.client = new Client();
-          // //asignamos el sock JS al stomp
-          // this.client.webSocketFactory = () =>{
-          //   return new SockJS("http://localhost:8092/chat")
-          // }
       
-          // this.client.onConnect = (frame) => {
-          //   console.log('Conectados: ' + this.client.connected + ' : ' + frame);
-          // }
 
-          // this.client.activate();
+    } else {
+      this.isLogged = false;
+      this.userName = '';
+    }
+    //para socketjs
+    this.client = new Client();
+    //asignamos el sock JS al stomp
+    this.client.webSocketFactory = () =>{
+      return new SockJS("http://localhost:8092/chat")
+    }
+
+    this.client.onConnect = (frame) => {
+      console.log('Conectados: ' + this.client.connected + ' : ' + frame);
+    }
+
+    this.client.activate();
   }
 
   message: Message = {
