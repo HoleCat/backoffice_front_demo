@@ -8,6 +8,7 @@ import es from '@angular/common/locales/es';
 import { CoreModule } from './core/core.module';
 import { HttpClientModule } from '@angular/common/http';
 import { interceptorProvider } from './core/interceptors/token.interceptor';
+
 registerLocaleData(es);
 
 @NgModule({
