@@ -8,6 +8,10 @@ const routes: Routes = [
     component: WrapperComponent,
     children: [
       {
+        path: 'chatbot',
+        loadChildren: () => import('../../features/chatbot/chatbot.module').then(m => m.ChatbotModule)
+      },
+      {
         path: 'chat',
         loadChildren: () => import('../../features/chat/chat.module').then(m => m.ChatModule)
       },

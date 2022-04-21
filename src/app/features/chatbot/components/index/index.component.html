@@ -1,0 +1,28 @@
+<div *ngIf="isLogged">
+    <h2>Bienvenido {{userName}}</h2>
+    <table class="table table-dark">
+      <thead>
+        <tr>
+          <th scope="col">Id</th>
+          <th scope="col">Description</th>
+          <th scope="col">Created_by</th>
+          <th scope="col">Created_at</th>
+          <th scope="col">Updated_by</th>
+          <th scope="col">Updated_at</th>
+          <th scope="col">Chatbot_question</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let chatbot of chatbots">
+          <td>{{chatbot.id}}</td>
+          <td>{{chatbot.description}}</td>
+          <td>{{chatbot.created_by}}</td>
+          <td>{{chatbot.created_at}}</td>
+          <td>{{chatbot.updated_by}}</td>
+          <td>{{chatbot.updated_at}}</td>
+          <td>{{chatbot.chatbot_question.description}}</td>
+          n chatbot <!--  chatbot_question  --> n Preguntas <!--  chatbot_question  --> n Optiones
+        </tr>
+      </tbody>
+    </table> 
+</div>
