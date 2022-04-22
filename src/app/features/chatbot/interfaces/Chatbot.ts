@@ -6,6 +6,5 @@ export interface Chatbot{
     created_by: number,
     created_at: string,
     updated_by: number,
-    updated_at: string,
-    chatbot_question: Chatbot_question
+    updated_at: string
 }

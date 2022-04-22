@@ -10,6 +10,6 @@ export interface Question{
     updated_at: string,
     status4: Status,
     question_type: Question_type,
-    expanded: boolean
+    //expanded: boolean
     //options: Option[]
 }
