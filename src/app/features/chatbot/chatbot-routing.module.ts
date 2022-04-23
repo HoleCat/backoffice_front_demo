@@ -16,7 +16,7 @@ const routes: Routes = [{
         component: CreateComponent
       },
       {
-        path: 'show',
+        path: 'show/:id',
         component: ShowComponent
       }
     ]

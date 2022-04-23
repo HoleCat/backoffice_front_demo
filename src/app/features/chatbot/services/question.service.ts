@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Chatbot_question } from '../interfaces/Chatbot_question';
 import { Question } from '../interfaces/Question';
 
 @Injectable({
@@ -11,7 +12,12 @@ export class QuestionService {
   constructor(private httpClient: HttpClient) { }
 
   //Para chatbot
-  public listQuestion(): Observable<Question[]> {
-    return this.httpClient.get<Question[]>(`http://localhost:8092/question/list`);
+  public listQuestionByChatbot(id: number): Observable<Chatbot_question[]> {
+    return this.httpClient.get<Chatbot_question[]>(`http://localhost:8092/chatbot_question/list/${id}`);
   }
+
+  public saveQuestion(obj: Question): Observable<any>{
+    return this.httpClient.post('http://localhost:8092/question/create', obj);
+  }
+  
 }

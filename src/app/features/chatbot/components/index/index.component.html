@@ -9,7 +9,7 @@
           <th scope="col">Created_at</th>
           <th scope="col">Updated_by</th>
           <th scope="col">Updated_at</th>
-          <th scope="col">Chatbot_question</th>
+          <th scope="col">Accion</th>
         </tr>
       </thead>
       <tbody>
@@ -20,8 +20,7 @@
           <td>{{chatbot.created_at}}</td>
           <td>{{chatbot.updated_by}}</td>
           <td>{{chatbot.updated_at}}</td>
-          <td>{{chatbot.chatbot_question.description}}</td>
-          n chatbot <!--  chatbot_question  --> n Preguntas <!--  chatbot_question  --> n Optiones
+          <td><button class="btn btn-outline-warning" routerLink="/dashboard/chatbot/show/{{chatbot.id}}"><i class="far fa-edit"></i>Agregar Pregunta</button></td>
         </tr>
       </tbody>
     </table> 
