@@ -8,7 +8,7 @@ export interface Question{
     created_at: string,
     updated_by: number,
     updated_at: string,
-    status4: Status,
+    status: Status,
     question_type: Question_type,
     //expanded: boolean
     //options: Option[]

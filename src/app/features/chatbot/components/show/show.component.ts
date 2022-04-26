@@ -8,6 +8,7 @@ import { Chatbot } from '../../interfaces/Chatbot';
 import { Chatbot_question } from '../../interfaces/Chatbot_question';
 import { Option_type } from '../../interfaces/Option_type';
 import { Question } from '../../interfaces/Question';
+import { Status } from '../../interfaces/Status';
 import { Question_options } from '../../interfaces/Question_options';
 import { Question_type } from '../../interfaces/Question_type';
 import { ChatbotService } from '../../services/chatbot.service';
@@ -52,6 +53,15 @@ export class ShowComponent implements OnInit {
     private tokenService: TokenService
   ) { }
 
+  question_status: Status = {
+    id: 2,
+    description: '',
+    created_by: 0,
+    created_at: '',
+    updated_by: 0,
+    updated_at: ''
+  }
+
   ngOnInit(): void {
     console.log('index ya cargó');
 
@@ -59,6 +69,7 @@ export class ShowComponent implements OnInit {
     if (this.tokenService.getToken()) {
       this.cargarQuestions();
       const id :number = this.activatedRoute.snapshot.params.id;
+      
       this.chatbotService.listChatbotById(id).subscribe(data=>this.chatbot1=data);
       this.question_typeService.listQuestion_type().subscribe(data=>this.question_types=data);
       this.option_typeService.listOption_type().subscribe(data=>this.option_types=data);
@@ -73,7 +84,8 @@ export class ShowComponent implements OnInit {
     this.formQuestion=this.fb.group({
       //codigo:[,[Validators.required]],
       description: ['',[Validators.required]],
-      question_type:['',[Validators.required]]
+      question_type:['',[Validators.required]],
+      status: [ this.question_status ,[Validators.required]]
     });
   
     this.formOption=this.fb.group({
@@ -85,9 +97,9 @@ export class ShowComponent implements OnInit {
 
   chatbot_question : Chatbot_question = {
     id: 0,
-    chatbot: this.chatbot1,
-    question: this.formQuestion.value
-}
+    chatbot: null,
+    question: null
+  }
 
   get description() { return this.formQuestion.get('description');}
   get question_type() { return this.formQuestion.get('question_type');}
@@ -116,14 +128,25 @@ export class ShowComponent implements OnInit {
   }
 
   questionSubscription: Subscription
+  chatbot: Chatbot = {
+    id: 0,
+    description: '',
+    created_by: 0,
+    created_at: '',
+    updated_by: 0,
+    updated_at: ''
+  }
   questionRegister(): void{
     if(this.questionSubscription != undefined) (this.questionSubscription.unsubscribe());
     this.questionSubscription = this.questionService.saveQuestion(this.formQuestion.value).subscribe(
       (data:any) => {
+        
         const id = this.activatedRoute.snapshot.params.id;
         console.log('question registrado : ', data);
+        this.chatbot_question.question = data;
+        this.chatbot.id = id;
+        this.chatbot_question.chatbot = this.chatbot;
         this.chatbot_questionRegister();
-        this.router.navigate(["./dashboard/chatbot/show/"+id])
       },
       (error:any) => {
         console.log('question error : ', error);
@@ -151,6 +174,7 @@ export class ShowComponent implements OnInit {
     this.optionSubscription = this.chatbotService.saveChatbotQuestion(this.chatbot_question).subscribe(
       (data:any) => {
         const id = this.activatedRoute.snapshot.params.id;
+        this.chatbot_questions.push(data);
         console.log('chat_questionRegister registrado : ', data);
         this.router.navigate(["./dashboard/chatbot/show/"+id])
       },
