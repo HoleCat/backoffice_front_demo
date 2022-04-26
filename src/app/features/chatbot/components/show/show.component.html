@@ -88,17 +88,17 @@
         </tbody>
       </table>
      <div>
-      {{option_types | json}}
+      
       <form [formGroup]="formOption" class="flex mx-auto flex-col" (ngSubmit)="optionRegister()">
         <div fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="center center">
             <div fxFlex="20" fxLayout="column">
-                <h1>Nueva Pregunta</h1>
+                <h1>Nueva Opción</h1>
                 <mat-form-field appearance="outline">
                     <mat-label>Description</mat-label>
                     <input matInput formControlName="description">
                 </mat-form-field>
                 <mat-form-field appearance="fill">
-                    <mat-label>Question_type</mat-label>
+                    <mat-label>Option_type</mat-label>
                     <mat-select formControlName="option_type">
                         <mat-option *ngFor="let opt of option_types" [value]="opt">
                           {{opt.description}}

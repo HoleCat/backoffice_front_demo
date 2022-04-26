@@ -17,7 +17,7 @@ export class AuthService {
     private httpClient: HttpClient
   ){}
 
-  public nuevo(newUser: NewUser): Observable<any>{
+  public register(newUser: NewUser): Observable<any>{
     return this.httpClient.post<any>(this.authURL + 'new', newUser);
   }
 

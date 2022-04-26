@@ -30,6 +30,7 @@ export class ShowComponent implements OnInit {
   question_options: Question_options[] = [];
   question_types: Question_type[] = [];
   option_types: Option_type[] = [];
+  currentDate = new Date();
 
   //formulario de Question
   formQuestion: FormGroup=new FormGroup({});
@@ -85,6 +86,10 @@ export class ShowComponent implements OnInit {
       //codigo:[,[Validators.required]],
       description: ['',[Validators.required]],
       question_type:['',[Validators.required]],
+      created_by: [1,[Validators.required]],
+      created_at: [this.currentDate,[Validators.required]],
+      updated_by: [1,[Validators.required]],
+      updated_at: [this.currentDate,[Validators.required]],
       status: [ this.question_status ,[Validators.required]]
     });
   
@@ -99,6 +104,12 @@ export class ShowComponent implements OnInit {
     id: 0,
     chatbot: null,
     question: null
+  }
+
+  question_option : Question_options = {
+    id: 0,
+    question: null,
+    option: null
   }
 
   get description() { return this.formQuestion.get('description');}
@@ -120,6 +131,7 @@ export class ShowComponent implements OnInit {
     this.optionsService.listOptionByQuestion(id).subscribe(
       data => {
         this.question_options = data;
+        this.question.id = id;
       },
       err => {
         console.log(err);
@@ -154,14 +166,28 @@ export class ShowComponent implements OnInit {
     );
   }
 
+
+  question: Question = {
+    id: 0,
+    description: '',
+    created_by: 0,
+    created_at: '',
+    updated_by: 0,
+    updated_at: '',
+    status: null,
+    question_type: null
+  }
+
   optionSubscription: Subscription
   optionRegister(): void{
     if(this.optionSubscription != undefined) (this.optionSubscription.unsubscribe());
-    this.optionSubscription = this.chatbotService.saveChatbotQuestion(this.formOption.value).subscribe(
+    this.optionSubscription = this.optionsService.saveOption(this.formOption.value).subscribe(
       (data:any) => {
-        const id = this.activatedRoute.snapshot.params.id;
         console.log('option registrado : ', data);
-        this.router.navigate(["./dashboard/chatbot/show/"+id])
+        console.log('id : ' + this.question.id)
+        this.question_option.option = data;
+        this.question_option.question = this.question;
+        this.question_optionsRegister();
       },
       (error:any) => {
         console.log('option error : ', error);
@@ -173,10 +199,21 @@ export class ShowComponent implements OnInit {
     if(this.optionSubscription != undefined) (this.optionSubscription.unsubscribe());
     this.optionSubscription = this.chatbotService.saveChatbotQuestion(this.chatbot_question).subscribe(
       (data:any) => {
-        const id = this.activatedRoute.snapshot.params.id;
         this.chatbot_questions.push(data);
         console.log('chat_questionRegister registrado : ', data);
-        this.router.navigate(["./dashboard/chatbot/show/"+id])
+      },
+      (error:any) => {
+        console.log('option error : ', error);
+      }
+    );
+  }
+
+  question_optionsRegister(){
+    if(this.optionSubscription != undefined) (this.optionSubscription.unsubscribe());
+    this.optionSubscription = this.questionService.saveQuestionOptions(this.question_option).subscribe(
+      (data:any) => {
+        this.question_options.push(data);
+        console.log('question_optionRegister registrado : ', data);
       },
       (error:any) => {
         console.log('option error : ', error);
