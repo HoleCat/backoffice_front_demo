@@ -1,7 +1,54 @@
 <div class="absolute z-10 flex flex-col items-end" style="right: 30px;bottom: 5vh;">
     <div class="bg-theme w-80 md:90 max-h-96 my-2 rounded-lg p-2 overflow-auto" [@inOutAnimation] *ngIf="chat_view_flag">
         <div class="w-full">
-            
+          <div class="w-full text-center" *ngIf="page_index == 0">
+            <button mat-raised-button color="primary" (click)="presentation_event()">
+              presentation button | translate
+            </button>
+          </div>
+          <div class="w-full text-center" *ngIf="page_index == 1">
+            <form>
+              <div class="messages">
+                <app-message
+                *ngFor="let message of messages"
+                message="message"
+                color="message.created_by == user.id ? 'primary':'warn'"
+                ></app-message>
+              </div>
+              <div class="message">
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <mat-label>Message : | translate</mat-label>
+                  <textarea matInput placeholder="Ex. 100 Main St">1600 Amphitheatre Pkwy</textarea>
+                </mat-form-field>
+                <div class="w-full text-center">
+                  <button>Enviar : | translate</button>
+                </div>
+              </div>
+            </form>
+            <button mat-raised-button color="primary" (click)="chat_bot_event()">
+              chat bot button
+            </button>
+          </div>
+          <div class="w-full text-center" *ngIf="page_index == 2">
+            <button mat-raised-button color="primary" (click)="chat_event()">
+              chat button
+            </button>
+          </div>
+          <div class="w-full text-center" *ngIf="page_index == 3">
+            <button mat-raised-button color="primary" (click)="review_event()">
+              review button
+            </button>
+          </div>
+          <div class="w-full text-center" *ngIf="page_index == 4">
+            <button mat-raised-button color="primary" (click)="end_event()">
+              end button
+            </button>
+          </div>
+          <div class="w-full text-center" *ngIf="page_index == 5">
+            <button mat-raised-button color="primary" (click)="again_event()">
+              again button
+            </button>
+          </div>
         </div>
     </div>
     <button mat-fab aria-label="chat" (click)="chat_view_flag = !chat_view_flag">
