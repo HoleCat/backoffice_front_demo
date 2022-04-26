@@ -1,0 +1,10 @@
+<div class="absolute z-10 flex flex-col items-end" style="right: 30px;bottom: 5vh;">
+    <div class="bg-theme w-80 md:90 max-h-96 my-2 rounded-lg p-2 overflow-auto" [@inOutAnimation] *ngIf="chat_view_flag">
+        <div class="w-full">
+            
+        </div>
+    </div>
+    <button mat-fab aria-label="chat" (click)="chat_view_flag = !chat_view_flag">
+      <mat-icon>headset_mic</mat-icon>
+    </button>
+</div>

@@ -13,6 +13,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import { ClientComponent } from './components/client/client.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,8 @@ import { MatInputModule } from '@angular/material/input';
     IndexComponent,
     ShowComponent,
     CreateComponent,
-    DeleteComponent
+    DeleteComponent,
+    ClientComponent
   ],
   imports: [
     CommonModule,
@@ -30,7 +33,11 @@ import { MatInputModule } from '@angular/material/input';
     MatToolbarModule,
     ReactiveFormsModule,
     MatInputModule,
+    MatIconModule,
     FormsModule
+  ],
+  exports: [
+    ClientComponent
   ]
 })
 export class ChatModule { }

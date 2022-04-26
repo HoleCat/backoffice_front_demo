@@ -9,7 +9,7 @@ import { DeleteComponent } from './components/delete/delete.component';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { interceptorProvider } from 'src/app/core/interceptors/token.interceptor';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -23,7 +23,8 @@ import { interceptorProvider } from 'src/app/core/interceptors/token.interceptor
     MyChatRoutingModule,
     FormsModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    MatListModule
   ]
 })
 export class MyChatModule { }

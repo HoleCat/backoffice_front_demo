@@ -316,4 +316,8 @@ export class IndexComponent implements OnInit {
     }
   ]*/
 
+  getArrayPrivateChat() {
+    return Array.from(this.privateChats);
+  }
+
 }
