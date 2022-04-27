@@ -6,6 +6,7 @@ import { TokenService } from 'src/app/core/services/token.service';
 import { Chat } from 'src/app/features/chat/directives/interfaces/Chat';
 import { MyChatService } from '../../services/mychat.service';
 import { Message } from '../../interfaces/Message';
+import { Status } from 'src/app/features/chatbot/interfaces/Status';
 
 @Component({
   selector: 'app-show',
@@ -72,30 +73,40 @@ export class ShowComponent implements OnInit {
     updated_at: ""
   }
 
+  status: Status = {
+    id: 0,
+    description: '',
+    created_by: 0,
+    created_at: '',
+    updated_by: 0,
+    updated_at: ''
+  }
+
   message: Message = {
-    id_chat: 2,
+    chat: this.chat,
     message: "",
     photo: "photo",
     path: "path",
-    id_status: 1,
+    status3: this.status,
     created_by: 1,
     created_at: "2022-04-02T02:50:12.000Z",
     updated_by: 1,
-    updated_at: "2022-04-02T02:50:12.000Z"
+    updated_at: "2022-04-02T02:50:12.000Z",
+    id: 0
   }
 
-  chatSubscription: Subscription
-  chatupdate(): void{
-    if(this.chatSubscription != undefined) (this.chatSubscription.unsubscribe());
-    this.chatSubscription = this.my_chatService.updateChat(2,this.chat).subscribe(
-      (data:any) => {
-        console.log('chat: ', data);
-      },
-      (error:any) => {
-        console.log('chat error : ', error);
-      }
-    );
-  }
+  // chatSubscription: Subscription
+  // chatupdate(): void{
+  //   if(this.chatSubscription != undefined) (this.chatSubscription.unsubscribe());
+  //   this.chatSubscription = this.my_chatService.updateChat(2,this.chat).subscribe(
+  //     (data:any) => {
+  //       console.log('chat: ', data);
+  //     },
+  //     (error:any) => {
+  //       console.log('chat error : ', error);
+  //     }
+  //   );
+  // }
 
   cargarChat(): void {
     this.my_chatService.listChats(1).subscribe(

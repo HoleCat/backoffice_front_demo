@@ -13,6 +13,8 @@ import { Files } from '../../interfaces/File';
 import { fileURLToPath } from 'url';
 import { User } from '../../interfaces/User';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { NewUser } from 'src/app/core/interfaces/NewUser';
+import { File_type } from '../../interfaces/File_type';
 
 
 @Component({
@@ -32,6 +34,7 @@ export class IndexComponent implements OnInit {
   publicChats = [];
   privateChats = new Map();
   tab: string = "CHATROOM";
+  currentDate = new Date();
   //
   user: User = {
     username: "",
@@ -172,11 +175,52 @@ export class IndexComponent implements OnInit {
         }
         this.client.publish({destination: '/app/private-message', body: JSON.stringify(chatMessage)});
         console.log(chatMessage);
-    }
+      }
+      this.upload()
+  }
+
+  newUser: NewUser = {
+    id: 2,
+    name: '',
+    last_name: '',
+    userName: '',
+    email: '',
+    password: '',
+    document_number: '',
+    phone: '',
+    photo: '',
+    created_by: 0,
+    created_at: '',
+    updated_by: 0,
+    updated_at: '',
+    document_type: null,
+    status: null
+  }
+
+  file_type: File_type = {
+    id: 1,
+    description: '',
+    short_description: '',
+    created_by: 0,
+    created_at: '',
+    updated_by: 0,
+    updated_at: ''
   }
 
   //para files
 
+  file: Files = {
+    description: '',
+    path: '',
+    user: this.newUser,
+    file_type: this.file_type,
+    created_by: 1,
+    created_at: '',
+    updated_by: 1,
+    updated_at: ''
+  }
+  
+  
   selectFile(event: any): void {
     this.selectedFiles = event.target.files;
   }
@@ -188,6 +232,8 @@ export class IndexComponent implements OnInit {
       if (file) {
         this.currentFile = file;
         console.log(file.name);
+        this.file.description = file.name;
+        this.file.path = "uploads/" + file.name;
         this.uploadService.upload(this.currentFile).subscribe(
           (event: any) => {
             if (event.type === HttpEventType.UploadProgress) {
@@ -195,7 +241,8 @@ export class IndexComponent implements OnInit {
             } else if (event instanceof HttpResponse) {
               this.message = event.body.message;
               this.fileInfos = this.uploadService.getFiles();
-              console.log(event.body);
+              this.fileregister(this.file);
+              console.log(event.body.message);
             }
           },
           (err: any) => {
@@ -214,7 +261,7 @@ export class IndexComponent implements OnInit {
   }
 
   fileSubscription: Subscription
-    fileregister(obj: Files): void{
+  fileregister(obj: Files): void{
       if(this.fileSubscription != undefined) (this.fileSubscription.unsubscribe());
       this.fileSubscription = this.my_chatService.saveFile(obj).subscribe(
         (data:any) => {
@@ -224,7 +271,7 @@ export class IndexComponent implements OnInit {
           console.log('chat error : ', error);
         }
       );
-    }
+  }
 
 
 
