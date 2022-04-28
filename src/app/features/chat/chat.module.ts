@@ -15,6 +15,8 @@ import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { ClientComponent } from './components/client/client.component';
 import { MatIconModule } from '@angular/material/icon';
+import { AppNotificationModule } from 'src/app/shared/app-notification/app-notification.module';
+import { ClientMessagesComponent } from './client-messages/client-messages.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,8 @@ import { MatIconModule } from '@angular/material/icon';
     ShowComponent,
     CreateComponent,
     DeleteComponent,
-    ClientComponent
+    ClientComponent,
+    ClientMessagesComponent
   ],
   imports: [
     CommonModule,
@@ -34,7 +37,8 @@ import { MatIconModule } from '@angular/material/icon';
     ReactiveFormsModule,
     MatInputModule,
     MatIconModule,
-    FormsModule
+    FormsModule,
+    AppNotificationModule
   ],
   exports: [
     ClientComponent
