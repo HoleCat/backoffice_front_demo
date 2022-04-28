@@ -32,7 +32,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    sessionStorage.setItem('user', user);
+    sessionStorage.setItem('user', JSON.stringify(this.user));
   }
   /*@HostBinding('class') componentCssClass: any;
   constructor(public overlayContainer: OverlayContainer){}
