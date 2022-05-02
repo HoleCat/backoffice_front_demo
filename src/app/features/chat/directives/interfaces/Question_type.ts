@@ -1,8 +1,6 @@
-export interface Chat{
-    topic: string,
+export interface Question_type{
+    id: number,
     description: string,
-    id_status: number,
-    id_user: number,
     created_by: number,
     created_at: string,
     updated_by: number,

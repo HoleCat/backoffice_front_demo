@@ -16,6 +16,7 @@ import { OptionTypeService } from '../../services/option-type.service';
 import { OptionsService } from '../../services/options.service';
 import { QuestionTypeService } from '../../services/question-type.service';
 import { QuestionService } from '../../services/question.service';
+import { Options } from '../../interfaces/Options';
 
 @Component({
   selector: 'app-show',
@@ -175,7 +176,8 @@ export class ShowComponent implements OnInit {
     updated_by: 0,
     updated_at: '',
     status: null,
-    question_type: null
+    question_type: null,
+    order_number: 0
   }
 
   optionSubscription: Subscription
@@ -217,6 +219,60 @@ export class ShowComponent implements OnInit {
       },
       (error:any) => {
         console.log('option error : ', error);
+      }
+    );
+  }
+
+  
+
+  subirQuestion(bean: Question){
+    if(this.optionSubscription != undefined) (this.optionSubscription.unsubscribe());
+    this.optionSubscription = this.questionService.updateSubirQuestion(bean.id, bean).subscribe(
+      (data:any) => {
+        this.question_options.push(data);
+        console.log('order_number actualizado : ', data);
+      },
+      (error:any) => {
+        console.log('subir error : ', error);
+      }
+    );
+  }
+
+  bajarQuestion(bean: Question){
+    if(this.optionSubscription != undefined) (this.optionSubscription.unsubscribe());
+    this.optionSubscription = this.questionService.updateBajarQuestion(bean.id, bean).subscribe(
+      (data:any) => {
+        this.question_options.push(data);
+        console.log('order_number actualizado : ', data);
+      },
+      (error:any) => {
+        console.log('bajar error : ', error);
+      }
+    );
+  }
+
+  subirOption(bean: Options){
+    if(this.optionSubscription != undefined) (this.optionSubscription.unsubscribe());
+    this.optionSubscription = this.optionsService.updateSubirOption(bean.id, bean).subscribe(
+      (data:any) => {
+        this.question_options.push(data);
+        console.log('order_number actualizado : ', data);
+      },
+      (error:any) => {
+        console.log('subir error : ', error);
+      }
+    );
+  }
+
+  bajarOption(bean: Options){
+    if(this.optionSubscription != undefined) (this.optionSubscription.unsubscribe());
+    this.optionSubscription = this.optionsService.updateBajarOption(bean.id, bean).subscribe(
+      (data:any) => {
+        this.question_options.push(data);
+        console.log('order_number actualizado : ', data);
+      },
+      (error:any) => {
+        console.log('bajar error : ', error);
       }
     );
   }

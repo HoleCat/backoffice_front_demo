@@ -1,5 +1,5 @@
-import { Chat } from "../../chat/directives/interfaces/Chat";
 import { Status } from "../../chatbot/interfaces/Status";
+import { Chat } from "./Chat";
 
 
 export interface Message{

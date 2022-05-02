@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { TokenService } from 'src/app/core/services/token.service';
-import { Chat } from '../../directives/interfaces/Chat';
 import { ChatService } from '../../directives/services/chat.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { Chat } from 'src/app/features/my-chat/interfaces/Chat';
 
 @Component({
   selector: 'app-index',

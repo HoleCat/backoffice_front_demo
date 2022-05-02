@@ -3,7 +3,7 @@ import { Client} from '@stomp/stompjs';
 import { Subscription } from 'rxjs';
 import * as SockJS from 'sockjs-client';
 import { TokenService } from 'src/app/core/services/token.service';
-import { Chat } from 'src/app/features/chat/directives/interfaces/Chat';
+import { Chat } from 'src/app/features/my-chat/interfaces/Chat';
 import { MyChatService } from '../../services/mychat.service';
 import { Message } from '../../interfaces/Message';
 import { Status } from 'src/app/features/chatbot/interfaces/Status';

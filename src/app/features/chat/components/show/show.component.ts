@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Client } from '@stomp/stompjs';
 import { Subscription } from 'rxjs';
 import { TokenService } from 'src/app/core/services/token.service';
-import { Chat } from '../../directives/interfaces/Chat';
+import { Chat } from 'src/app/features/my-chat/interfaces/Chat';
 import { Message } from '../../directives/interfaces/Message';
 import { ChatService } from '../../directives/services/chat.service';
 

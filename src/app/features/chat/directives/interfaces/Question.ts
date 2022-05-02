@@ -4,13 +4,11 @@ import { Status } from "./Status";
 export interface Question{
     id: number,
     description: string,
+    order_number: number,
     created_by: number,
     created_at: string,
     updated_by: number,
     updated_at: string,
-    order_number: number,
-    status: Status,
     question_type: Question_type,
-    //expanded: boolean
-    //options: Option[]
+    status: Status
 }

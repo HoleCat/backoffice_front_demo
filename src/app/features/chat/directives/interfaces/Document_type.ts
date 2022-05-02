@@ -1,8 +1,7 @@
-export interface Chat{
-    topic: string,
+export interface Document_type{
+    id: number,
     description: string,
-    id_status: number,
-    id_user: number,
+    short_description: string,
     created_by: number,
     created_at: string,
     updated_by: number,

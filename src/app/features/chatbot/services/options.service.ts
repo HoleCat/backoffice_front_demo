@@ -18,4 +18,11 @@ export class OptionsService {
   public saveOption(obj: Options): Observable<any>{
     return this.httpClient.post('http://localhost:8092/options/create', obj);
   }
+
+  public updateSubirOption(id: number, obj: Options): Observable<any> {
+    return this.httpClient.put<any>(`http://localhost:8092/options/updateSubir/${id}`, obj);
+  }
+  public updateBajarOption(id: number, obj: Options): Observable<any> {
+    return this.httpClient.put<any>(`http://localhost:8092/options/updateBajar/${id}`, obj);
+  }
 }

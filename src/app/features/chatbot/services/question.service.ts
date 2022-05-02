@@ -24,5 +24,12 @@ export class QuestionService {
   public saveQuestionOptions(obj: Question_options): Observable<any>{
     return this.httpClient.post('http://localhost:8092/question_options/create', obj);
   }
+
+  public updateSubirQuestion(id: number, obj: Question): Observable<any> {
+    return this.httpClient.put<any>(`http://localhost:8092/question/updateSubir/${id}`, obj);
+  }
+  public updateBajarQuestion(id: number, obj: Question): Observable<any> {
+    return this.httpClient.put<any>(`http://localhost:8092/question/updateBajar/${id}`, obj);
+  }
   
 }
