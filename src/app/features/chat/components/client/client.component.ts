@@ -12,6 +12,8 @@ import { Document_type } from 'src/app/core/interfaces/Document_type';
 import { Question_options } from '../../directives/interfaces/Question_options';
 import { Status } from '../../directives/interfaces/Status';
 import { ChatService } from '../../directives/services/chat.service';
+import { Options } from '../../directives/interfaces/Options';
+import { Answer } from '../../directives/interfaces/Answer';
 
 @Component({
   selector: 'app-client',
@@ -81,7 +83,8 @@ export class ClientComponent implements OnInit {
   question_index: number = 0;
 
   option_index: number = 0;
-  disable = false;
+
+  selected = -1;
 
   presentation_event():void {
     this.page_index = 1;
@@ -115,7 +118,54 @@ export class ClientComponent implements OnInit {
     this.logging = false;
   }
 
+  options: Options = {
+    id: 0,
+    description: '',
+    order_number: 0,
+    created_by: 0,
+    created_at: '',
+    updated_by: 0,
+    updated_at: '',
+    option_type: null
+  }
+
+  status: Status = {
+    id: 2,
+    description: '',
+    created_by: 0,
+    created_at: '',
+    updated_by: 0,
+    updated_at: '',
+    status_type: null
+  }
+
+  answer: Answer = {
+    id: 0,
+    description: '',
+    created_by: 0,
+    created_at: '',
+    updated_by: 0,
+    updated_at: '',
+    value1: '',
+    value2: 0,
+    value3: false,
+    status: this.status,
+    options: null
+  }
+
   nextQuestion(id:number): void{
+    console.log(this.options);
+    this.answer.value1 = this.options.description;
+    this.answer.options = this.options;
+    console.log(this.answer);
+    this.chatService.saveAnswer(this.answer).subscribe(
+      data => {
+        console.log(data);
+      },
+      err => {
+        console.log(err);
+      }
+    );;
     this.question_index = id+1;
   }
 
@@ -136,17 +186,12 @@ export class ClientComponent implements OnInit {
     );
   }
 
-  isDisabled: boolean = false;
-
-  onOptionPressed(checked: boolean){
-    if (checked) { //Si el elemento fue seleccionado
-      
-    } else { 
-      this.isDisabled =true;
-    }
+  onOptionPressed(checked: boolean,options: Options){
+    if (checked) {
+      console.log(options);
+      this.options = options;
+    } 
   }
-
-
 
   PrepareQuestions(id: number): void {
     
