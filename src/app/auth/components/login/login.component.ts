@@ -78,7 +78,7 @@ export class LoginComponent implements OnInit {
   success = false;
 
   async submitHandler() {
-    console.log('zxczxczxcxz');
+    console.log('login existoso');
     this.loading = true;
     const formValue = this.myForm.value;
     // this.userService.sign_up(formValue).subscribe(

@@ -1,1 +1,29 @@
-<p>sign-in works!</p>
+<!-- <div *ngIf="isLogged; else loggedOut" class="notification is-success">
+    <h2>Ya has iniciado sesión</h2>
+</div> -->
+<ng-template>
+<form [formGroup]="myForm" class="flex mx-auto flex-col" [hidden]="success" (ngSubmit)="submitHandler()">
+    <mat-toolbar class="bg-blue-500 w-full">
+        <h4>Login</h4>
+    </mat-toolbar>
+    <br>
+    <mat-form-field appearance="outline">
+        <mat-label>Username</mat-label>
+        <input matInput placeholder="userName" formControlName="userName">
+        <mat-error *ngIf="userName.invalid && userName.touched">
+            userName invalido
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" placeholder="password" formControlName="password">
+        <mat-hint align="end">Debe tener letras y numeros</mat-hint>
+        <mat-error *ngIf="password.invalid && password.touched">
+            Contraseña invalido
+        </mat-error>
+    </mat-form-field>
+    <br>
+    <button mat-raised-button type="submit" class="bg-yellow-600" [disabled]="myForm.invalid" >Sign in</button>
+    <div *ngIf="myForm.submitted && isLoginFail" class="notification is-success">Fail en el login: {{err.error.message}}</div>
+</form>
+</ng-template>

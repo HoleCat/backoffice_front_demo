@@ -2,11 +2,108 @@
     <div class="bg-theme w-80 md:90 max-h-96 my-2 rounded-lg p-2 overflow-auto" [@inOutAnimation] *ngIf="chat_view_flag">
         <div class="w-full">
           <div class="w-full text-center" *ngIf="page_index == 0">
+            
+            <div *ngIf="logging">
+              <app-sign-in></app-sign-in>
+              <button mat-raised-button type="button" class="bg-yellow-600" (click)="registrar()">Sign up</button>
+            </div>
+            <div *ngIf="register">
+              <app-sign-up></app-sign-up>
+            </div>
             <button mat-raised-button color="primary" (click)="presentation_event()">
               presentation button | translate
             </button>
           </div>
           <div class="w-full text-center" *ngIf="page_index == 1">
+            <!--TRAER EL CHATBOT CON SU PREGUNTAS Y OPCIONES-->
+            <div>
+              <h2>CHATBOT</h2>
+              <table class="table table-dark">
+                <thead>
+                  <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">topic</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Created_by</th>
+                    <th scope="col">Created_at</th>
+                    <th scope="col">Updated_by</th>
+                    <th scope="col">Updated_at</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let chatbot of chatbots">
+                    <td>{{chatbot.id}}</td>
+                    <td>{{chatbot.topic}}</td>
+                    <td>{{chatbot.description}}</td>
+                    <td>{{chatbot.created_by}}</td>
+                    <td>{{chatbot.created_at}}</td>
+                    <td>{{chatbot.updated_by}}</td>
+                    <td>{{chatbot.updated_at}}</td>
+                </tbody>
+              </table> 
+            </div>
+            <div>
+              <h2>QUESTION</h2>
+              <table class="table table-dark">
+                <thead>
+                  <tr>
+                    <th scope="col">Description</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Created_by</th>
+                    <th scope="col">Created_at</th>
+                    <th scope="col">Updated_by</th>
+                    <th scope="col">Updated_at</th>
+                    <th scope="col">Question_type</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let chatbot_question of chatbot_questions">
+                    <td>{{chatbot_question.question.description}}</td>
+                    <td>{{chatbot_question.question.status.description}}</td>
+                    <td>{{chatbot_question.question.created_by}}</td>
+                    <td>{{chatbot_question.question.created_at}}</td>
+                    <td>{{chatbot_question.question.updated_by}}</td>
+                    <td>{{chatbot_question.question.updated_at}}</td>
+                    <td>{{chatbot_question.question.question_type.description}}</td>
+          
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- <div>
+              <h2>OPTION</h2>
+              <table class="table table-dark">
+                <thead>
+                  <tr>
+                    <th scope="col">Description</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Created_by</th>
+                    <th scope="col">Created_at</th>
+                    <th scope="col">Updated_by</th>
+                    <th scope="col">Updated_at</th>
+                    <th scope="col">Option_type</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let question_option of question_options">
+                    <td>{{question_option.option.description}}</td>
+                    <td>{{question_option.option.status.description}}</td>
+                    <td>{{question_option.option.created_by}}</td>
+                    <td>{{question_option.option.created_at}}</td>
+                    <td>{{question_option.option.updated_by}}</td>
+                    <td>{{question_option.option.updated_at}}</td>
+                    <td>{{question_option.option.option_type.description}}</td>
+                  </tr>
+                </tbody>
+              </table>
+             <div> -->
+
+
+            <button mat-raised-button color="primary" (click)="chat_bot_event()">
+              chat bot button
+            </button>
+          </div>
+          <div class="w-full text-center" *ngIf="page_index == 2">
             <form>
               <div class="messages">
                 <app-message
@@ -25,16 +122,44 @@
                 </div>
               </div>
             </form>
-            <button mat-raised-button color="primary" (click)="chat_bot_event()">
-              chat bot button
-            </button>
-          </div>
-          <div class="w-full text-center" *ngIf="page_index == 2">
             <button mat-raised-button color="primary" (click)="chat_event()">
               chat button
             </button>
           </div>
           <div class="w-full text-center" *ngIf="page_index == 3">
+            <div *ngFor="let chatbot_question of chatbot_questions; let i = index " [attr.data-index]="i">
+              <div *ngIf="question_index == i">
+
+                <h2>QUESTION</h2>
+
+                <div>{{question_index}} {{chatbot_question.question.description}}</div>
+
+                 <!-- <div *ngFor="let question_option of question_options; let i = index " [attr.data-index]="i">
+                  <div *ngIf="option_index == i">
+                    <div>{{option_index}} {{question_option.option.description}}</div>
+                    <button mat-raised-button color="primary" (click)="nextOption(option_index)">
+                      NEXT OPTION
+                     </button>
+                  </div>
+                </div> -->
+
+                <h2>OPTIONS</h2>
+                <div *ngFor="let question_option of question_options">
+                  <div>{{question_option.option.description}}</div>
+                </div>
+
+                  <div class="example-section" *ngFor="let question_option of question_options; let i = index">
+                    <mat-checkbox class="example-margin" [disabled]="isDisabled" (change)="onOptionPressed($event.checked)">{{i}}{{question_option.option.description}}</mat-checkbox>
+                    <!-- <mat-checkbox class="example-margin" [disabled]="true">Disabled</mat-checkbox> -->
+                  </div>
+
+                <button mat-raised-button color="primary" (click)="nextQuestion(question_index)">
+                 NEXT QUESTION
+                </button>
+
+              </div> 
+                
+            </div>
             <button mat-raised-button color="primary" (click)="review_event()">
               review button
             </button>

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Chat } from '../../directives/interfaces/Chat';
+import { Chatbot } from '../../directives/interfaces/Chatbot';
 import { ChatService } from '../../directives/services/chat.service';
 
 @Component({

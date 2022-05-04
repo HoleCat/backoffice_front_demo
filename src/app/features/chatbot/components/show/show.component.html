@@ -7,11 +7,14 @@
           <th scope="col">Id_Chatbot_question</th>
           <th scope="col">Description</th>
           <th scope="col">Status</th>
+          <th scope="col">Order</th>
           <th scope="col">Created_by</th>
           <th scope="col">Created_at</th>
           <th scope="col">Updated_by</th>
           <th scope="col">Updated_at</th>
           <th scope="col">Question_type</th>
+          <th scope="col">Accion</th>
+          <th scope="col">Accion</th>
           <th scope="col">Accion</th>
         </tr>
       </thead>
@@ -21,12 +24,15 @@
           <td>{{chatbot_question.id}}</td>
           <td>{{chatbot_question.question.description}}</td>
           <td>{{chatbot_question.question.status.description}}</td>
+          <td>{{chatbot_question.question.order_number}}</td>
           <td>{{chatbot_question.question.created_by}}</td>
           <td>{{chatbot_question.question.created_at}}</td>
           <td>{{chatbot_question.question.updated_by}}</td>
           <td>{{chatbot_question.question.updated_at}}</td>
           <td>{{chatbot_question.question.question_type.description}}</td>
           <td><button class="btn btn-outline-warning" (click)="cargarOptions(chatbot_question.question.id)"><i class="far fa-edit"></i>Agregar Opcion</button></td>
+          <td><button class="btn btn-outline-warning" (click)="subirQuestion(chatbot_question.question)"><i class="far fa-edit"></i>Subir</button></td>
+          <td><button class="btn btn-outline-warning" (click)="bajarQuestion(chatbot_question.question)"><i class="far fa-edit"></i>Bajar</button></td>
           <!-- respuesta -> id_chatbot y id_pregunta -->
         </tr>
       </tbody>
@@ -83,22 +89,24 @@
             <td>{{question_option.option.updated_by}}</td>
             <td>{{question_option.option.updated_at}}</td>
             <td>{{question_option.option.option_type.description}}</td>
+            <td><button class="btn btn-outline-warning" (click)="subirOptions(chatbot_question.option)"><i class="far fa-edit"></i>Subir</button></td>
+            <td><button class="btn btn-outline-warning" (click)="bajarOptions(chatbot_question.option)"><i class="far fa-edit"></i>Bajar</button></td>
             <!-- respuesta -> id_chatbot y id_pregunta -->
           </tr>
         </tbody>
       </table>
      <div>
-      {{option_types | json}}
+      
       <form [formGroup]="formOption" class="flex mx-auto flex-col" (ngSubmit)="optionRegister()">
         <div fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="center center">
             <div fxFlex="20" fxLayout="column">
-                <h1>Nueva Pregunta</h1>
+                <h1>Nueva Opción</h1>
                 <mat-form-field appearance="outline">
                     <mat-label>Description</mat-label>
                     <input matInput formControlName="description">
                 </mat-form-field>
                 <mat-form-field appearance="fill">
-                    <mat-label>Question_type</mat-label>
+                    <mat-label>Option_type</mat-label>
                     <mat-select formControlName="option_type">
                         <mat-option *ngFor="let opt of option_types" [value]="opt">
                           {{opt.description}}
