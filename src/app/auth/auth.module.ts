@@ -35,6 +35,10 @@ import { MatToolbarModule } from '@angular/material/toolbar';
   ],
   providers: [
     HttpClientModule
+  ],
+  exports: [
+    LoginComponent,
+    RegisterComponent
   ]
 })
 export class AuthModule { }

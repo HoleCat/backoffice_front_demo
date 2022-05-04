@@ -17,6 +17,10 @@ import { ClientComponent } from './components/client/client.component';
 import { MatIconModule } from '@angular/material/icon';
 import { AppNotificationModule } from 'src/app/shared/app-notification/app-notification.module';
 import { ClientMessagesComponent } from './client-messages/client-messages.component';
+import { MatSelectModule } from '@angular/material/select';
+import { MatChipsModule } from '@angular/material/chips';
+import { AuthModule } from '../auth/auth.module';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -34,11 +38,15 @@ import { ClientMessagesComponent } from './client-messages/client-messages.compo
     MatButtonModule,
     MatTableModule,
     MatToolbarModule,
+    MatSelectModule,
     ReactiveFormsModule,
     MatInputModule,
     MatIconModule,
     FormsModule,
-    AppNotificationModule
+    MatChipsModule,
+    AppNotificationModule,
+    AuthModule,
+    MatCheckboxModule
   ],
   exports: [
     ClientComponent

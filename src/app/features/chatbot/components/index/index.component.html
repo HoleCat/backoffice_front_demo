@@ -1,4 +1,4 @@
-<div *ngIf="isLogged">
+<div id="htmlData" *ngIf="isLogged">
     <h2>Bienvenido {{userName}}</h2>
     <table class="table table-dark">
       <thead>
@@ -24,4 +24,9 @@
         </tr>
       </tbody>
     </table> 
+    <h2>Bienvenido {{userName}}</h2>
+</div>
+
+<div>
+  <button class="btn col col-lg-4 btn-danger btn-block ml-4" (click)="downloadPDF()">Download PDF</button>
 </div>
