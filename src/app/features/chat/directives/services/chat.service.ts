@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Chat } from 'src/app/features/my-chat/interfaces/Chat';
+import { Answer } from '../interfaces/Answer';
 import { Chatbot } from '../interfaces/Chatbot';
 import { Chatbot_question } from '../interfaces/Chatbot_question';
 import { Message } from '../interfaces/Message';
@@ -51,6 +52,11 @@ export class ChatService {
 
   public listOptionByQuestion(id: number): Observable<Question_options[]> {
     return this.httpClient.get<Question_options[]>(`http://localhost:8092/question_options/list/${id}`);
+  }
+
+  //Para Answer
+  public saveAnswer(obj: Answer): Observable<any>{
+    return this.httpClient.post('http://localhost:8092/answer/create', obj);
   }
 
 

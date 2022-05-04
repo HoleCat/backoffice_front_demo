@@ -134,24 +134,11 @@
 
                 <div>{{question_index}} {{chatbot_question.question.description}}</div>
 
-                 <!-- <div *ngFor="let question_option of question_options; let i = index " [attr.data-index]="i">
-                  <div *ngIf="option_index == i">
-                    <div>{{option_index}} {{question_option.option.description}}</div>
-                    <button mat-raised-button color="primary" (click)="nextOption(option_index)">
-                      NEXT OPTION
-                     </button>
-                  </div>
-                </div> -->
-
                 <h2>OPTIONS</h2>
-                <div *ngFor="let question_option of question_options">
-                  <div>{{question_option.option.description}}</div>
-                </div>
 
-                  <div class="example-section" *ngFor="let question_option of question_options; let i = index">
-                    <mat-checkbox class="example-margin" [disabled]="isDisabled" (change)="onOptionPressed($event.checked)">{{i}}{{question_option.option.description}}</mat-checkbox>
-                    <!-- <mat-checkbox class="example-margin" [disabled]="true">Disabled</mat-checkbox> -->
-                  </div>
+                  <mat-selection-list class="example-section" *ngFor="let question_option of question_options; let i = index">
+                    <mat-checkbox class="example-margin" [checked]="select === i" (change)="select = i; onOptionPressed($event.checked,question_option.option)" [value]="question_option.option">{{i}} {{question_option.option.description}}</mat-checkbox>
+                  </mat-selection-list>
 
                 <button mat-raised-button color="primary" (click)="nextQuestion(question_index)">
                  NEXT QUESTION
