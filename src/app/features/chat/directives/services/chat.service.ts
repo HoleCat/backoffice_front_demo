@@ -45,6 +45,13 @@ export class ChatService {
   public listChatbot(): Observable<Chatbot[]> {
     return this.httpClient.get<Chatbot[]>(`http://localhost:8092/chatbot/list`);
   }
+
+  //Chatbot bean
+  public chatbotPublicado(): Observable<Chatbot> {
+    return this.httpClient.get<Chatbot>(`http://localhost:8092/chatbot/publicado`);
+  }
+
+
   //Para chatbot
   public listQuestionByChatbot(id: number): Observable<Chatbot_question[]> {
     return this.httpClient.get<Chatbot_question[]>(`http://localhost:8092/chatbot_question/list/${id}`);

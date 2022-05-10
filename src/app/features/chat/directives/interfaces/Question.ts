@@ -1,3 +1,4 @@
+import { Options } from "./Options";
 import { Question_type } from "./Question_type";
 import { Status } from "./Status";
 
@@ -10,5 +11,6 @@ export interface Question{
     updated_by: number,
     updated_at: string,
     question_type: Question_type,
-    status: Status
+    status: Status,
+    options: Options[]
 }

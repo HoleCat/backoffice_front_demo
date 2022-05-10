@@ -14,6 +14,8 @@ import { Status } from '../../directives/interfaces/Status';
 import { ChatService } from '../../directives/services/chat.service';
 import { Options } from '../../directives/interfaces/Options';
 import { Answer } from '../../directives/interfaces/Answer';
+import { Question } from '../../directives/interfaces/Question';
+import { element } from 'protractor';
 
 @Component({
   selector: 'app-client',
@@ -49,10 +51,8 @@ import { Answer } from '../../directives/interfaces/Answer';
 })
 export class ClientComponent implements OnInit {
 
-  //Para Chatbot
-  chatbots: Chatbot[] = [];
-  chatbot_questions: Chatbot_question[] = [];
-  question_options: Question_options[] = [];
+  optiones: Options[] = [];
+  questions: Question[] = [];
 
   constructor(
     private chatService: ChatService,
@@ -97,10 +97,12 @@ export class ClientComponent implements OnInit {
 
   chat_event():void {
     this.page_index = 3;
-    this.PrepareQuestions(1);
+    this.cargarChatbots();
+    // this.PrepareQuestions(1);
   }
 
   review_event():void {
+    this.cargarChatbots();
     this.page_index = 4;
     
   }
@@ -153,6 +155,19 @@ export class ClientComponent implements OnInit {
     options: null
   }
 
+  chatbots: Chatbot = {
+    id: 0,
+    topic: '',
+    description: '',
+    status: undefined,
+    user: undefined,
+    created_by: 0,
+    created_at: '',
+    updated_by: 0,
+    updated_at: '',
+    questions: []
+  }
+
   nextQuestion(id:number): void{
     console.log(this.options);
     this.answer.value1 = this.options.description;
@@ -175,10 +190,12 @@ export class ClientComponent implements OnInit {
 
   //Para chatbot
   cargarChatbots(): void {
-    this.chatService.listChatbot().subscribe(
+    this.chatService.chatbotPublicado().subscribe(
       data => {
         this.chatbots = data;
-        this.cargarQuestions(1);
+        this.questions = this.chatbots.questions;
+
+        console.log(this.questions);
       },
       err => {
         console.log(err);
@@ -193,41 +210,41 @@ export class ClientComponent implements OnInit {
     } 
   }
 
-  PrepareQuestions(id: number): void {
+  // PrepareQuestions(id: number): void {
     
-    this.chatService.listQuestionByChatbot(id).subscribe(
-      data => {
-        this.chatbot_questions = data;
-        this.cargarOptions(1);
-      },
-      err => {
-        console.log(err);
-      }
-    );
-  }
+  //   this.chatService.listQuestionByChatbot(id).subscribe(
+  //     data => {
+  //       this.chatbot_questions = data;
+  //       this.cargarOptions(1);
+  //     },
+  //     err => {
+  //       console.log(err);
+  //     }
+  //   );
+  // }
 
-  cargarQuestions(id: number): void {
+  // cargarQuestions(id: number): void {
     
-    this.chatService.listQuestionByChatbot(id).subscribe(
-      data => {
-        this.chatbot_questions = data;
-        this.cargarOptions(1);
-      },
-      err => {
-        console.log(err);
-      }
-    );
-  }
+  //   this.chatService.listQuestionByChatbot(id).subscribe(
+  //     data => {
+  //       this.chatbot_questions = data;
+  //       this.cargarOptions(1);
+  //     },
+  //     err => {
+  //       console.log(err);
+  //     }
+  //   );
+  // }
 
-  cargarOptions(id: number): void {
-    this.chatService.listOptionByQuestion(id).subscribe(
-      data => {
-        this.question_options = data;
-      },
-      err => {
-        console.log(err);
-      }
-    );
-  }
+  // cargarOptions(id: number): void {
+  //   this.chatService.listOptionByQuestion(id).subscribe(
+  //     data => {
+  //       this.question_options = data;
+  //     },
+  //     err => {
+  //       console.log(err);
+  //     }
+  //   );
+  // }
 
 }

@@ -1,3 +1,4 @@
+import { Question } from "./Question";
 import { Status } from "./Status";
 import { User } from "./User";
 
@@ -10,5 +11,6 @@ export interface Chatbot{
     created_by: number,
     created_at: string,
     updated_by: number,
-    updated_at: string
+    updated_at: string,
+    questions: Question[]
 }
