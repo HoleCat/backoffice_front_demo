@@ -21,6 +21,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { AuthModule } from '../auth/auth.module';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MessageClientComponent } from './components/message-client/message-client.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     CreateComponent,
     DeleteComponent,
     ClientComponent,
-    ClientMessagesComponent
+    ClientMessagesComponent,
+    MessageClientComponent
   ],
   imports: [
     CommonModule,
@@ -46,7 +49,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatChipsModule,
     AppNotificationModule,
     AuthModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatSnackBarModule
   ],
   exports: [
     ClientComponent

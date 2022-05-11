@@ -14,6 +14,8 @@ import { Status } from '../../directives/interfaces/Status';
 import { ChatService } from '../../directives/services/chat.service';
 import { Options } from '../../directives/interfaces/Options';
 import { Answer } from '../../directives/interfaces/Answer';
+import { Question } from '../../directives/interfaces/Question';
+import { element } from 'protractor';
 
 @Component({
   selector: 'app-client',
@@ -49,10 +51,12 @@ import { Answer } from '../../directives/interfaces/Answer';
 })
 export class ClientComponent implements OnInit {
 
-  //Para Chatbot
-  chatbots: Chatbot[] = [];
-  chatbot_questions: Chatbot_question[] = [];
-  question_options: Question_options[] = [];
+  answers: Answer[] = [];
+  questions: Question[] = [];
+  buttonChatbot: boolean = false;
+  buttonNext: boolean = true;
+  buttonBefore: boolean = false;
+  currentDate = new Date();
 
   constructor(
     private chatService: ChatService,
@@ -65,7 +69,10 @@ export class ClientComponent implements OnInit {
 
 
   ngOnInit(): void {
-     
+    if(this.tokenService.getToken()){
+      this.logging = false;
+      this.presentation_event();
+    }
   }
 
   //Form State
@@ -91,18 +98,18 @@ export class ClientComponent implements OnInit {
     this.cargarChatbots();
   }
 
-  chat_bot_event():void {
+  chat_bot_event(id:number):void {
     this.page_index = 2;
+    this.cargarChatbots();
+    this.nextQuestion(id);
   }
 
   chat_event():void {
     this.page_index = 3;
-    this.PrepareQuestions(1);
   }
 
   review_event():void {
     this.page_index = 4;
-    
   }
 
   end_event():void {
@@ -130,7 +137,7 @@ export class ClientComponent implements OnInit {
   }
 
   status: Status = {
-    id: 2,
+    id: 1,
     description: '',
     created_by: 0,
     created_at: '',
@@ -142,10 +149,10 @@ export class ClientComponent implements OnInit {
   answer: Answer = {
     id: 0,
     description: '',
-    created_by: 0,
-    created_at: '',
-    updated_by: 0,
-    updated_at: '',
+    created_by: 1,
+    created_at: this.currentDate,
+    updated_by: 1,
+    updated_at: this.currentDate,
     value1: '',
     value2: 0,
     value3: false,
@@ -153,32 +160,78 @@ export class ClientComponent implements OnInit {
     options: null
   }
 
-  nextQuestion(id:number): void{
-    console.log(this.options);
-    this.answer.value1 = this.options.description;
-    this.answer.options = this.options;
-    console.log(this.answer);
-    this.chatService.saveAnswer(this.answer).subscribe(
-      data => {
-        console.log(data);
-      },
-      err => {
-        console.log(err);
-      }
-    );;
-    this.question_index = id+1;
+  chatbots: Chatbot = {
+    id: 0,
+    topic: '',
+    description: '',
+    status: undefined,
+    user: undefined,
+    created_by: 0,
+    created_at: '',
+    updated_by: 0,
+    updated_at: '',
+    questions: []
   }
 
-  nextOption(id:number): void{
-    this.option_index = id+1;
+  backQuestion(id:number): void{
+    console.log("back");
+    if(id-1 == 0)
+    {
+      this.buttonBefore = false;   
+    }
+    else
+    {
+      this.buttonNext = true;   
+    };
+    this.question_index = id-1;
+    // console.log(this.answers[id-1].id);
+    // this.chatService.deleteAnswer(this.answers[id-1].id).subscribe(
+    //   data => {
+    //     console.log(data);
+    //     console.log("borrado");
+    //   },
+    //   err => {
+    //     console.log(err);
+    //   }
+    // );
+  }
+
+  nextQuestion(id:number): void{
+    console.log("next");
+
+    if(id+1 > 0)
+    {
+      this.buttonBefore = true;
+    };
+
+    if(id+1 == this.questions.length-1)
+    {
+      this.buttonChatbot = true;
+      this.buttonNext = false;
+    };
+    // this.answer.value1 = this.options.description;
+    // this.answer.options = this.options;
+    // this.chatService.saveAnswer(this.answer).subscribe(
+    //   data => {
+    //     console.log(data);
+    //     this.answer = data;
+    //     this.answers.push(this.answer);
+    //   },
+    //   err => {
+    //     console.log(err);
+    //   }
+    // );
+    this.question_index = id+1;
   }
 
   //Para chatbot
   cargarChatbots(): void {
-    this.chatService.listChatbot().subscribe(
+    this.chatService.chatbotPublicado().subscribe(
       data => {
         this.chatbots = data;
-        this.cargarQuestions(1);
+        this.questions = this.chatbots.questions;
+
+        console.log(this.questions);
       },
       err => {
         console.log(err);
@@ -186,48 +239,10 @@ export class ClientComponent implements OnInit {
     );
   }
 
-  onOptionPressed(checked: boolean,options: Options){
+  onOptionPressed(checked: boolean,option: Options){
     if (checked) {
-      console.log(options);
-      this.options = options;
+      console.log(option);
+      this.options = option;
     } 
   }
-
-  PrepareQuestions(id: number): void {
-    
-    this.chatService.listQuestionByChatbot(id).subscribe(
-      data => {
-        this.chatbot_questions = data;
-        this.cargarOptions(1);
-      },
-      err => {
-        console.log(err);
-      }
-    );
-  }
-
-  cargarQuestions(id: number): void {
-    
-    this.chatService.listQuestionByChatbot(id).subscribe(
-      data => {
-        this.chatbot_questions = data;
-        this.cargarOptions(1);
-      },
-      err => {
-        console.log(err);
-      }
-    );
-  }
-
-  cargarOptions(id: number): void {
-    this.chatService.listOptionByQuestion(id).subscribe(
-      data => {
-        this.question_options = data;
-      },
-      err => {
-        console.log(err);
-      }
-    );
-  }
-
 }

@@ -5,9 +5,9 @@ export interface Answer {
     id: number,
 	description: string,
 	created_by: number,
-    created_at: string,
+    created_at: Date,
     updated_by: number,
-    updated_at: string,
+    updated_at: Date,
 	value1: string;
 	value2: number;
 	value3: boolean;

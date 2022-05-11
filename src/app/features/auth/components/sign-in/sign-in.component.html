@@ -1,7 +1,6 @@
 <!-- <div *ngIf="isLogged; else loggedOut" class="notification is-success">
     <h2>Ya has iniciado sesión</h2>
 </div> -->
-<ng-template>
 <form [formGroup]="myForm" class="flex mx-auto flex-col" [hidden]="success" (ngSubmit)="submitHandler()">
     <mat-toolbar class="bg-blue-500 w-full">
         <h4>Login</h4>
@@ -24,6 +23,4 @@
     </mat-form-field>
     <br>
     <button mat-raised-button type="submit" class="bg-yellow-600" [disabled]="myForm.invalid" >Sign in</button>
-    <div *ngIf="myForm.submitted && isLoginFail" class="notification is-success">Fail en el login: {{err.error.message}}</div>
 </form>
-</ng-template>

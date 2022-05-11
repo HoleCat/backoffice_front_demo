@@ -45,6 +45,13 @@ export class ChatService {
   public listChatbot(): Observable<Chatbot[]> {
     return this.httpClient.get<Chatbot[]>(`http://localhost:8092/chatbot/list`);
   }
+
+  //Chatbot bean
+  public chatbotPublicado(): Observable<Chatbot> {
+    return this.httpClient.get<Chatbot>(`http://localhost:8092/chatbot/publicado`);
+  }
+
+
   //Para chatbot
   public listQuestionByChatbot(id: number): Observable<Chatbot_question[]> {
     return this.httpClient.get<Chatbot_question[]>(`http://localhost:8092/chatbot_question/list/${id}`);
@@ -57,6 +64,10 @@ export class ChatService {
   //Para Answer
   public saveAnswer(obj: Answer): Observable<any>{
     return this.httpClient.post('http://localhost:8092/answer/create', obj);
+  }
+
+  public deleteAnswer(id: number): Observable<any>{
+    return this.httpClient.delete<any>(`http://localhost:8092/answer/delete/${id}`);
   }
 
 
