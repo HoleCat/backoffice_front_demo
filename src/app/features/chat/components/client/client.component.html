@@ -18,7 +18,7 @@
           </div>
           <div class="w-full text-center" *ngIf="page_index == 1">
             <div *ngFor="let question of questions; let i = index">
-              <div *ngIf="question_index == i">
+              <div class="flex flex-col" *ngIf="question_index == i">
 
                 <h2>QUESTION</h2>
 

@@ -1,9 +1,13 @@
+import { Chat } from "./Chat";
+import { Status } from "./Status";
+
 export interface Message{
-    id_chat: number,
+    id: number,
+    chat: Chat,
     message: string,
     photo: string,
     path: string,
-    id_status: number,
+    status: Status,
     created_by: number,
     created_at: string,
     updated_by: number,

@@ -1,9 +1,5 @@
 
-<div *ngIf="isLogged; else loggedOut">
-    <h2>Bienvenido {{userName}}</h2>
-    <div>
-      <button mat-raised-button color="primary" routerLink="/dashboard/chat/create">Nuevo chat</button>
-    </div>
+    <h2>Chats Pendientes</h2>
     <table class="table table-dark">
       <thead>
         <tr>
@@ -23,20 +19,13 @@
           <td>{{chat.id}}</td>
           <td>{{chat.topic}}</td>
           <td>{{chat.description}}</td>
-          <td>{{chat.id_user}}</td>
-          <td>{{chat.id_status}}</td>
+          <td>{{chat.user.name}}</td>
+          <td>{{chat.status.description}}</td>
           <td>{{chat.created_by}}</td>
           <td>{{chat.created_at}}</td>
           <td>{{chat.updated_by}}</td>
           <td>{{chat.updated_at}}</td>
-          <td><button class="btn btn-outline-warning" routerLink="/dashboard/chat/show/{{chat.id}}"><i class="far fa-edit"></i>Editar</button></td>
+          <td><button class="btn btn-outline-warning" routerLink="/dashboard/chat/show/{{chat.user.userName}}"><i class="far fa-edit"></i>Editar</button></td>
         </tr>
       </tbody>
     </table> 
-</div>
-
-<ng-template #loggedOut>
-    <h2>No has iniciado sesión</h2>
-</ng-template>
-  <!-- <button mat-raised-button color="primary" (click)="product()">Primary</button> -->
-<button mat-raised-button color="primary" *ngIf="isLogged" (click)="onLogOut()">Cerrar sesión</button>

@@ -23,6 +23,7 @@ import { AuthModule } from '../auth/auth.module';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MessageClientComponent } from './components/message-client/message-client.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     AppNotificationModule,
     AuthModule,
     MatCheckboxModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatListModule
   ],
   exports: [
     ClientComponent

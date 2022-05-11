@@ -1,5 +1,5 @@
 export interface UserData{
-    username: string,
+    senderName: string,
     receivername: string,
     connected: boolean,
     message: string

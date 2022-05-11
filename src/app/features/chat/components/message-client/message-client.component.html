@@ -1,12 +1,24 @@
-<div class="message bg-theme flex items-center text-center">
-    <div class="w-full text-center">
-        {{userData | json}}
-    <mat-form-field class="example-full-width" appearance="fill">
-        <mat-label>Message</mat-label>
-        <textarea matInput placeholder="mensaje"></textarea>
-    </mat-form-field>
+<div class="bg-theme flex flex-col items-center text-center">
+
+    <div class="w-full bg-white-50" *ngFor="let chat of privateChats | keyvalue">
+        <div>{{chat | json}}</div>
+        <!-- <div>{{chat.value.senderName}} {{chat.value.message}}</div> -->
+        <!-- <div *ngIf="chat.senderName === userData.username">{{chat.senderName}} -- {{chat.message}}</div>
+        <div class="bg-white-200" *ngIf="chat.senderName !== userData.username">{{chat.senderName}} -- {{chat.message}}</div>    
+     -->
     </div>
+
     <div class="w-full text-center">
-        <button>Enviar</button>
+        <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Mensaje</mat-label>
+            <textarea matInput placeholder="Escribe algo privado..."  [(ngModel)]="userData.message"></textarea>
+        </mat-form-field>
     </div>
+
+    <div class="w-full text-center">
+        <div class="w-full text-center p-2">
+            <button mat-raised-button color="accent" (click)="sendPrivateMessage()">Enviar mensaje</button>
+        </div>
+    </div>
+
 </div>

@@ -1,10 +1,17 @@
+import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Client } from '@stomp/stompjs';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import SockJS from 'sockjs-client';
+import { NewUser } from 'src/app/core/interfaces/NewUser';
 import { TokenService } from 'src/app/core/services/token.service';
-import { Chat } from 'src/app/features/my-chat/interfaces/Chat';
+import { Files } from 'src/app/features/my-chat/interfaces/File';
+import { File_type } from 'src/app/features/my-chat/interfaces/File_type';
+import { UserData } from 'src/app/features/my-chat/interfaces/TutorialUserData';
+import { MyChatService } from 'src/app/features/my-chat/services/mychat.service';
+import { UploadFilesService } from 'src/app/features/my-chat/services/uploadFiles.service';
 import { Message } from '../../directives/interfaces/Message';
 import { ChatService } from '../../directives/services/chat.service';
 
@@ -14,232 +21,277 @@ import { ChatService } from '../../directives/services/chat.service';
   styleUrls: ['./show.component.css']
 })
 export class ShowComponent implements OnInit {
-
-  //para sockjs
-  private client: Client;
-  
-  //connected: boolean = false;
-  
-  //para el logeado
+  //para el token
   isLogged = false;
-  userName = ''
+  userName = '';
+
+  //para web sockect
+  private client: Client;
+  connected: boolean = false;
+  publicChats = [];
+  privateChats = new Map();
+  currentDate = new Date();
+
+  userData: UserData = {
+    senderName: "",
+      receivername: "",
+      connected: false,
+      message: ""
+  }
   //messages: Message[] = [];
+
+
+  //para files
+  selectedFiles?: FileList;
+  currentFile?: File;
+  progress = 0;
+  message = '';
+  fileInfos?: Observable<any>;
+
 
   constructor(
     private tokenService: TokenService,
-    private chatService: ChatService
+    private chatService: ChatService,
+    private uploadService: UploadFilesService,
+    private activatedRoute: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
+
+    const id = this.activatedRoute.snapshot.params.id;
+
+    //cuando estes logueado o no
     if (this.tokenService.getToken()) {
       this.isLogged = true;
       this.userName = this.tokenService.getUserName();
-      this.cargarChat();
-      // //para socketjs
-      // this.client = new Client();
-      // //asignamos el sock JS al stomp
-      // this.client.webSocketFactory = () =>{
-      //   return new SockJS("http://localhost:8092/chat")
-      // }
-  
-      // this.client.onConnect = (frame) => {
-      //   console.log('Conectados: ' + this.client.connected + ' : ' + frame);
-      //   this.connected = true;
+      this.userData.senderName = this.userName;
+      this.userData.receivername = id;
 
-      //   this.client.subscribe('/topic/private-messages/1', e=>{
-      //     console.log("estas conectado, ha dormir", e)
-      //   });
-      // }
+      this.client = new Client();
+      //asignamos el sock JS al stomp
+      this.client.webSocketFactory = () =>{
+          return new SockJS("http://localhost:8092/ws");
+      }
+      this.client.onConnect = (frame) => {
+          console.log('Conectados: ' + this.client.connected + ' : ' + frame);
+          this.connected = true;
+          this.userData.connected = true;
 
-      // this.client.onDisconnect = (frame) => {
-      //   console.log('Desconectados: ' + !this.client.connected + ' : ' + frame);
-      //   this.connected = false;
-      // }
+          this.client.subscribe('/chatroom/public', this.callBackPublicMessage);
+
+          this.client.subscribe('/user/'+ this.userData.senderName + '/private', this.callBackPrivateMessage);
+          let chatMessage = {
+            senderName: this.userData.senderName,
+            receiverName: id,
+            message: "",
+            status: "JOIN"
+          };
+          this.client.publish({destination: '/app/message', body: JSON.stringify(chatMessage)});
+          
+      }
+      this.client.activate();
 
     } else {
       this.isLogged = false;
       this.userName = '';
     }
+
+    this.fileInfos = this.uploadService.getFiles();
+    console.log(this.fileInfos);
+
   }
 
-  chat: Chat = {
-    topic: "",
-    description: "",
-    id_user: null,
-    id_status: null,
-    created_by: null,
-    created_at: "",
-    updated_by: null,
-    updated_at: ""
+  messages: Message = {
+    id: 0,
+    chat: null,
+    message: '',
+    photo: '',
+    path: '',
+    status: null,
+    created_by: 0,
+    created_at: '',
+    updated_by: 0,
+    updated_at: ''
   }
 
-  message: Message = {
-    id_chat: 2,
-    message: "",
-    photo: "photo",
-    path: "path",
-    id_status: 1,
-    created_by: 1,
-    created_at: "2022-04-02T02:50:12.000Z",
-    updated_by: 1,
-    updated_at: "2022-04-02T02:50:12.000Z"
-  }
-
-  chatSubscription: Subscription
-  chatupdate(): void{
-    if(this.chatSubscription != undefined) (this.chatSubscription.unsubscribe());
-    this.chatSubscription = this.chatService.updateChat(2,this.chat).subscribe(
+  saveMessage(message: Message){
+    this.chatService.saveMessage(message).subscribe(
       (data:any) => {
-        console.log('chat: ', data);
+        console.log('message: ', data);
       },
       (error:any) => {
-        console.log('chat error : ', error);
+        console.log('message error : ', error);
       }
     );
   }
 
-  cargarChat(): void {
-    this.chatService.listChats(1).subscribe(
-      data => {
-        if(data){
-          this.chat = data[0];
+
+  //para web sokect
+  getUsers():string[] {
+    
+    const unique = this.publicChats
+    .map(item => item.senderName)
+    .filter((value, index, self) => self.indexOf(value) === index)
+
+    return unique;
+  }
+
+  callBackPublicMessage = (payload:any) => {
+    let payloadData = JSON.parse(payload.body);
+    switch(payloadData.status){
+        case "JOIN": 
+        if(!this.privateChats.get(payloadData.senderName)){
+          this.privateChats.set(payloadData.senderName, []);
         }
-      },
-      err => {
-        console.log(err);
-      }
-    );
+        this.publicChats.push(payloadData);
+        break;
+        case "MESSAGE":
+        this.publicChats.push(payloadData);
+        break;
+    } 
   }
 
-  MessageSubscription: Subscription
+  callBackPrivateMessage = (payload:any) => {
+    let payloadData = JSON.parse(payload.body);
+    console.log('callBackMessage: ', payload);
+    if(this.privateChats.get(payloadData.senderName)){
+      this.privateChats.get(payloadData.senderName).push(payloadData);
+    }else{
+      let list = [];
+      list.push(payloadData);
+      this.privateChats.set(payloadData.senderName, list);
+    }
+    
+  }
 
-  saveMessage(): void{
-    if(this.MessageSubscription != undefined) (this.MessageSubscription.unsubscribe());
-    this.MessageSubscription = this.chatService.saveMessage(this.message).subscribe(
-      (data:any) => {
-        console.log('chat: ', data);
-      },
-      (error:any) => {
-        console.log('chat error : ', error);
+  disconnect(): void{
+    this.client.deactivate();
+  }
+
+  sendPublicMessage(): void{
+      if(this.client){
+        let chatMessage = {
+          senderName: this.userData.senderName,
+          message: this.userData.message,
+          status: "MESSAGE"
+        };
+        this.client.publish({destination: '/app/message', body: JSON.stringify(chatMessage)});
+    }
+  }
+  sendPrivateMessage(): void{
+      if(this.client){
+        let chatMessage = {
+          senderName: this.userData.senderName,
+          receiverName: this.userData.receivername,
+          message: this.userData.message,
+          status: "MESSAGE"
+        };
+
+        this.privateChats.get(this.userData.senderName).push(chatMessage);
+
+        this.client.publish({destination: '/app/private-message', body: JSON.stringify(chatMessage)});
+        console.log(chatMessage);
       }
-    );
+      this.upload()
+  }
+
+  newUser: NewUser = {
+    id: 2,
+    name: '',
+    last_name: '',
+    userName: '',
+    email: '',
+    password: '',
+    document_number: '',
+    phone: '',
+    photo: '',
+    created_by: 0,
+    created_at: '',
+    updated_by: 0,
+    updated_at: '',
+    document_type: null,
+    status: null
   }
 
 
 
 
-  // chat: Chat = null;
-  // myForm: FormGroup;
 
-  // constructor(
-  //   private activatedRoute: ActivatedRoute,
-  //   private router: Router,
-  //   private fb: FormBuilder,
-  //   private chatService: ChatService
-  // ) { }
+  //file
+  file_type: File_type = {
+    id: 1,
+    description: '',
+    short_description: '',
+    created_by: 0,
+    created_at: '',
+    updated_by: 0,
+    updated_at: ''
+  }
 
-  // ngOnInit(): void {
-  //   const id = this.activatedRoute.snapshot.params.id;
-  //   console.log(id);
-  //   this.chatService.detail(id).subscribe(
-  //     data => {
-  //       this.chat = data;
-  //       console.log(data);
+  //para files
 
-  //       this.myForm.controls['topic'].setValue(this.chat.topic);
-  //       this.myForm.controls['description'].setValue(this.chat.description);
-  //       this.myForm.controls['id_status'].setValue(this.chat.id_status);
-  //       this.myForm.controls['id_user'].setValue(this.chat.id_user);
-  //       this.myForm.controls['created_by'].setValue(this.chat.created_by);
-  //       this.myForm.controls['created_at'].setValue(this.chat.created_at);
-  //       this.myForm.controls['updated_by'].setValue(this.chat.updated_by);
-  //       this.myForm.controls['updated_at'].setValue(this.chat.updated_at);
-  //     },
-  //     err => {
-  //       console.log(err);
-  //     }
-  //   );
-
-  //   this.myForm = this.fb.group({
-      
-  //     topic: [
-  //       '',
-  //       [
-  //         Validators.required
-  //       ]
-  //     ],
-  //     description: [
-  //       '',
-  //       [
-  //         Validators.required
-  //       ]
-  //     ],
-  //     id_status: [
-  //       '',
-  //       [
-  //         Validators.required
-  //       ]
-  //     ],
-  //     id_user: [
-  //       '',
-  //       [
-  //         Validators.required
-  //       ]
-  //     ],
-  //     created_by: [
-  //       '',
-  //       [
-  //         Validators.required
-  //       ]
-  //     ],
-  //     created_at: [
-  //       '',
-  //       [
-  //         Validators.required
-  //       ]
-  //     ],
-  //     updated_by: [
-  //       '',
-  //       [
-  //         Validators.required
-  //       ]
-  //     ],
-  //     updated_at: [
-  //       '',
-  //       [
-  //         Validators.required
-  //       ]
-  //     ]
-  //   });
-
-  //   console.log(this.chat.topic)
-    
-    
-  // }
-
-  // get topic() { return this.myForm.get('topic');}
-  // get description() { return this.myForm.get('description');}
-  // get id_status() { return this.myForm.get('id_status');}
-  // get id_user() { return this.myForm.get('id_user');}
-  // get created_by() { return this.myForm.get('created_by');}
-  // get created_at() { return this.myForm.get('created_at');}
-  // get updated_by() { return this.myForm.get('updated_by');}
-  // get updated_at() { return this.myForm.get('updated_at');}
+  file: Files = {
+    description: '',
+    path: '',
+    user: this.newUser,
+    file_type: this.file_type,
+    created_by: 1,
+    created_at: '',
+    updated_by: 1,
+    updated_at: ''
+  }
 
 
-  // contactSubscription: Subscription
-  // chatUpdate(): void {
-  //   const id = this.activatedRoute.snapshot.params.id;
-  //   if(this.contactSubscription != undefined) (this.contactSubscription.unsubscribe());
-  //   this.contactSubscription = this.chatService.updateChat(id, this.myForm.value).subscribe(
-  //     (data:any) => {
-  //       console.log('chat actualizado : ', data);
-  //       this.router.navigate(["./dashboard/chat/index"])
-  //     },
-  //     (error:any) => {
-  //       console.log('chat error : ', error);
-  //     }
-  //   );
-  // }
+  selectFile(event: any): void {
+    this.selectedFiles = event.target.files;
+  }
+
+  upload(): void {
+    this.progress = 0;
+    if (this.selectedFiles) {
+      const file: File | null = this.selectedFiles.item(0);
+      if (file) {
+        this.currentFile = file;
+        console.log(file.name);
+        this.file.description = file.name;
+        this.file.path = "uploads/" + file.name;
+        this.uploadService.upload(this.currentFile).subscribe(
+          (event: any) => {
+            if (event.type === HttpEventType.UploadProgress) {
+              this.progress = Math.round(100 * event.loaded / event.total);
+            } else if (event instanceof HttpResponse) {
+              this.message = event.body.message;
+              this.fileInfos = this.uploadService.getFiles();
+              this.fileregister(this.file);
+              console.log(event.body.message);
+            }
+          },
+          (err: any) => {
+            console.log(err);
+            this.progress = 0;
+            if (err.error && err.error.message) {
+              this.message = err.error.message;
+            } else {
+              this.message = 'Could not upload the file!';
+            }
+            this.currentFile = undefined;
+          });
+      }
+      this.selectedFiles = undefined;
+    }
+  }
+
+  fileSubscription: Subscription
+  fileregister(obj: Files): void{
+      if(this.fileSubscription != undefined) (this.fileSubscription.unsubscribe());
+      this.fileSubscription = this.chatService.saveFile(obj).subscribe(
+        (data:any) => {
+          console.log('chat: ', data);
+        },
+        (error:any) => {
+          console.log('chat error : ', error);
+        }
+      );
+  }
 
 }
