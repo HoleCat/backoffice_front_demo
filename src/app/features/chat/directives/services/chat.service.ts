@@ -1,12 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Chat } from 'src/app/features/my-chat/interfaces/Chat';
+import { Files } from 'src/app/features/my-chat/interfaces/File';
 import { Answer } from '../interfaces/Answer';
+import { Chat } from '../interfaces/Chat';
 import { Chatbot } from '../interfaces/Chatbot';
 import { Chatbot_question } from '../interfaces/Chatbot_question';
 import { Message } from '../interfaces/Message';
 import { Question_options } from '../interfaces/Question_options';
+import { User } from '../interfaces/User';
 
 @Injectable({
   providedIn: 'root'
@@ -15,13 +17,14 @@ export class ChatService {
 
   constructor(private httpClient: HttpClient) { }
 
-  public listChats(id_user: number): Observable<Chat[]> {
-    return this.httpClient.get<Chat[]>(`http://localhost:8092/chat/list/${id_user}`);
+  //Para Chat
+  public listChats(): Observable<Chat[]> {
+    return this.httpClient.get<Chat[]>('http://localhost:8092/chat/list');
   }
 
-  // saveChat(obj: Chat):Observable<any> {
-  //   return this.httpClient.post('http://localhost:8092/chat/create' + obj);
-  // }
+  public listChatsByUser(id_user: number): Observable<Chat[]> {
+    return this.httpClient.get<Chat[]>(`http://localhost:8092/chat/list/${id_user}`);
+  }
 
   public detail(id: number): Observable<Chat> {
     return this.httpClient.get<Chat>('http://localhost:8092/chat/detail/'+ id);
@@ -35,8 +38,8 @@ export class ChatService {
     return this.httpClient.put('http://localhost:8092/chat/update/' + id, obj);
   }
 
-  //Message
-  saveMessage(obj:Message):Observable<any>{
+  // Para Message
+  public saveMessage(obj:Message):Observable<any>{
     //here i need to add a post request
     return this.httpClient.post('http://localhost:8092/message/create', obj);
   }
@@ -46,19 +49,8 @@ export class ChatService {
     return this.httpClient.get<Chatbot[]>(`http://localhost:8092/chatbot/list`);
   }
 
-  //Chatbot bean
   public chatbotPublicado(): Observable<Chatbot> {
     return this.httpClient.get<Chatbot>(`http://localhost:8092/chatbot/publicado`);
-  }
-
-
-  //Para chatbot
-  public listQuestionByChatbot(id: number): Observable<Chatbot_question[]> {
-    return this.httpClient.get<Chatbot_question[]>(`http://localhost:8092/chatbot_question/list/${id}`);
-  }
-
-  public listOptionByQuestion(id: number): Observable<Question_options[]> {
-    return this.httpClient.get<Question_options[]>(`http://localhost:8092/question_options/list/${id}`);
   }
 
   //Para Answer
@@ -70,5 +62,20 @@ export class ChatService {
     return this.httpClient.delete<any>(`http://localhost:8092/answer/delete/${id}`);
   }
 
+  //Para mailAdmin
+  public sendMailAdmin(): Observable<any> {
+    return this.httpClient.get<any>(`http://localhost:8092/chat/sendMailAdmin`);
+  }
+
+  //Para user
+  public userByUsername(username: string): Observable<User> {
+    return this.httpClient.get<User>(`http://localhost:8092/auth/byusername/${username}`);
+  }
+
+  //Para File
+  public saveFile(obj: Files): Observable<any>{
+    return this.httpClient.post('http://localhost:8092/file/create', obj);
+  }
+  
 
 }
