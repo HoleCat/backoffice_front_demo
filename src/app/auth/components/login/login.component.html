@@ -1,13 +1,8 @@
-<div *ngIf="isLogged; else loggedOut" class="notification is-success">
-    <h2>Ya has iniciado sesión</h2>
-</div>
-<ng-template #loggedOut>
 <form [formGroup]="myForm" class="flex mx-auto flex-col" [hidden]="success" (ngSubmit)="submitHandler()">
     <mat-toolbar class="bg-blue-500 w-full">
         <h4>Login</h4>
     </mat-toolbar>
     <br>
-    <!--{{ myForm.value | json }}-->
     <mat-form-field appearance="outline">
         <mat-label>Username</mat-label>
         <input matInput placeholder="userName" formControlName="userName">
@@ -23,27 +18,7 @@
             Contraseña invalido
         </mat-error>
     </mat-form-field>
-    <!--<mat-form-field appearance="outline">
-        <mat-label>Dni</mat-label>
-        <input matInput placeholder="dni" formControlName="dni">
-        <mat-hint align="end">Documento de identidad</mat-hint>
-        <mat-error *ngIf="dni.invalid && dni.touched">
-            Documento invalido
-        </mat-error>
-        <mat-error *ngIf="dni.errors?.minlength && dni.touched">
-            Minimo son 8 digitos
-        </mat-error>
-        <mat-error *ngIf="dni.errors?.maxlength && dni.touched">
-            Maximo son 10 digitos
-        </mat-error>
-    </mat-form-field>
-    <mat-checkbox class="mx-auto" formControlName="agree" color="primary">Aceptas las condiciones?</mat-checkbox>
-    -->
     <br>
     <button mat-raised-button type="submit" class="bg-yellow-600" [disabled]="myForm.invalid" >Sign in</button>
-    <div *ngIf="myForm.submitted && isLoginFail" class="notification is-success">Fail en el login: {{err.error.message}}</div>
+   
 </form>
-</ng-template>
-<!--<div *ngIf="success" class="notification is-success">
-    Yay todo nice !!
-</div> -->

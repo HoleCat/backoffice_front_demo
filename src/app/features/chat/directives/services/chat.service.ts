@@ -66,5 +66,9 @@ export class ChatService {
     return this.httpClient.post('http://localhost:8092/answer/create', obj);
   }
 
+  public deleteAnswer(id: number): Observable<any>{
+    return this.httpClient.delete<any>(`http://localhost:8092/answer/delete/${id}`);
+  }
+
 
 }
