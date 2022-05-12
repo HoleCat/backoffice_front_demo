@@ -123,6 +123,7 @@ export class MessageClientComponent implements OnInit {
                 // this.chat.user = data;
                 // this.chat.sender_name = this.userName;
                 // this.chat.topic = "Hola";
+                //cambios
                 this.saveChat(this.chat);
                 console.log("Client.component" + this.clientComponent.findChat);
                 console.log(this.chat);
