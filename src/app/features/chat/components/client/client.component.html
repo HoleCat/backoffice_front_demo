@@ -52,7 +52,10 @@
           </div>
           <div class="w-full text-center" *ngIf="page_index == 2">
             <form>
-              <app-message-client></app-message-client>
+              <app-message-client
+              [chat]="chat">
+
+              </app-message-client>
               <!-- <div class="messages">
                 <app-message
                 *ngFor="let message of messages"

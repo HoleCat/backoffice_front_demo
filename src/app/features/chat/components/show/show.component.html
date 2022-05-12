@@ -4,13 +4,10 @@
         <div class="bg-blue-200 w-1/2 md:w-1/3 p-2">
             {{userData | json}}
             <mat-selection-list #users [multiple]="false">
-                <mat-list-option *ngFor="let user of getUsers()" [value]="user" (click)="userData.receivername = user">
+                <mat-list-option *ngFor="let user of getUsers()" [value]="user" (click)="userData.receiveName = user">
                     {{user}}
                 </mat-list-option>
             </mat-selection-list>
-            <div (click)="userData.receivername = receiveName">
-              {{receiveName}}
-            </div>
         </div>
         <div class="bg-yellow-300 w-1/2 md:w-2/3 flex flex-col">
             <div class="bg-green-300">

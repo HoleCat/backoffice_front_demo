@@ -6,16 +6,19 @@ import { LoginUser } from 'src/app/core/interfaces/LoginUser';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { DocumentTypeService } from 'src/app/core/services/document_type.service';
 import { TokenService } from 'src/app/core/services/token.service';
-import { Chatbot } from '../../directives/interfaces/Chatbot';
-import { Chatbot_question } from '../../directives/interfaces/Chatbot_question';
+import { Chatbot } from '../../interfaces/Chatbot';
+import { Chatbot_question } from '../../interfaces/Chatbot_question';
 import { Document_type } from 'src/app/core/interfaces/Document_type';
-import { Question_options } from '../../directives/interfaces/Question_options';
-import { Status } from '../../directives/interfaces/Status';
-import { ChatService } from '../../directives/services/chat.service';
-import { Options } from '../../directives/interfaces/Options';
-import { Answer } from '../../directives/interfaces/Answer';
-import { Question } from '../../directives/interfaces/Question';
+import { Question_options } from '../../interfaces/Question_options';
+import { Status } from '../../interfaces/Status';
+import { ChatService } from '../../services/chat.service';
+import { Options } from '../../interfaces/Options';
+import { Answer } from '../../interfaces/Answer';
+import { Question } from '../../interfaces/Question';
 import { element } from 'protractor';
+import { Chat } from '../../interfaces/Chat';
+import { MessageClientComponent } from '../message-client/message-client.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-client',
@@ -58,6 +61,8 @@ export class ClientComponent implements OnInit {
   buttonBefore: boolean = false;
   currentDate = new Date();
 
+  findChat: boolean = false;
+
   constructor(
     private chatService: ChatService,
     private tokenService: TokenService,
@@ -67,11 +72,47 @@ export class ClientComponent implements OnInit {
     private document_typeService: DocumentTypeService
   ) { }
 
+  chat: Chat =  {
+    id: 0,
+    topic: '',
+    description: '',
+    status: undefined,
+    user: undefined,
+    sender_name: '',
+    receive_name: '',
+    created_by: 0,
+    created_at: undefined,
+    updated_by: 0,
+    updated_at: undefined
+  };
 
+  chatServiceSubscription: Subscription;
   ngOnInit(): void {
+    this.chatServiceSubscription = this.chatService.chat$.subscribe(
+      (data:any) => {
+        this.chat = data;
+      }
+    );
     if(this.tokenService.getToken()){
       this.logging = false;
       this.presentation_event();
+      
+      this.chatService.chatByUser(this.tokenService.getUserName()).subscribe(
+        data => {
+          if(data != null){
+            this.chatService.setChat(data);
+            //this.chat = data;
+            this.findChat = true;
+            this.chat_bot_event();
+          }
+          else{
+            this.findChat = false;
+          }
+        },
+        error => {
+          console.log(error);
+        }
+      );      
     }
   }
 
@@ -98,10 +139,9 @@ export class ClientComponent implements OnInit {
     this.cargarChatbots();
   }
 
-  chat_bot_event(id:number):void {
+  chat_bot_event():void {
     this.page_index = 2;
     this.cargarChatbots();
-    this.nextQuestion(id);
   }
 
   chat_event():void {

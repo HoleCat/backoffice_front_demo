@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Files } from 'src/app/features/my-chat/interfaces/File';
 import { Answer } from '../interfaces/Answer';
 import { Chat } from '../interfaces/Chat';
@@ -14,8 +14,26 @@ import { User } from '../interfaces/User';
   providedIn: 'root'
 })
 export class ChatService {
+  private chat: BehaviorSubject<Chat> = new BehaviorSubject<Chat>({
+    id: 0,
+    topic: '',
+    description: '',
+    status: null,
+    user: null,
+    sender_name: '',
+    receive_name: '',
+    created_by: 0,
+    created_at: null,
+    updated_by: 0,
+    updated_at: null
+  });
+  public chat$ = this.chat.asObservable();
 
   constructor(private httpClient: HttpClient) { }
+
+  setChat(chat: Chat){
+    this.chat.next(chat);
+  }
 
   //Para Chat
   public listChats(): Observable<Chat[]> {
@@ -26,7 +44,11 @@ export class ChatService {
     return this.httpClient.get<Chat[]>(`http://localhost:8092/chat/list/${id_user}`);
   }
 
-  public detail(id: number): Observable<Chat> {
+  public chatByUser(userName: string): Observable<Chat> {
+    return this.httpClient.get<Chat>(`http://localhost:8092/chat/detailUsername/${userName}`);
+  }
+
+  public detailChat(id: number): Observable<Chat> {
     return this.httpClient.get<Chat>('http://localhost:8092/chat/detail/'+ id);
   }
 
@@ -70,6 +92,10 @@ export class ChatService {
   //Para user
   public userByUsername(username: string): Observable<User> {
     return this.httpClient.get<User>(`http://localhost:8092/auth/byusername/${username}`);
+  }
+
+  public detailUser(id: number): Observable<User>{
+    return this.httpClient.get<User>(`http://localhost:8092/auth/detail/${id}`)
   }
 
   //Para File

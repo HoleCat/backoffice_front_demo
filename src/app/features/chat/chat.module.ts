@@ -55,7 +55,8 @@ import { MatListModule } from '@angular/material/list';
     MatListModule
   ],
   exports: [
-    ClientComponent
+    ClientComponent,
+    MessageClientComponent
   ]
 })
 export class ChatModule { }

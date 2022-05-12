@@ -12,8 +12,10 @@ import { File_type } from 'src/app/features/my-chat/interfaces/File_type';
 import { UserData } from 'src/app/features/my-chat/interfaces/TutorialUserData';
 import { MyChatService } from 'src/app/features/my-chat/services/mychat.service';
 import { UploadFilesService } from 'src/app/features/my-chat/services/uploadFiles.service';
-import { Message } from '../../directives/interfaces/Message';
-import { ChatService } from '../../directives/services/chat.service';
+import { Chat } from '../../interfaces/Chat';
+import { Message } from '../../interfaces/Message';
+import { User } from '../../interfaces/User';
+import { ChatService } from '../../services/chat.service';
 
 @Component({
   selector: 'app-show',
@@ -32,15 +34,6 @@ export class ShowComponent implements OnInit {
   privateChats = new Map();
   currentDate = new Date();
 
-  userData: UserData = {
-    senderName: "",
-      receivername: "",
-      connected: false,
-      message: ""
-  }
-  //messages: Message[] = [];
-
-
   //para files
   selectedFiles?: FileList;
   currentFile?: File;
@@ -48,6 +41,58 @@ export class ShowComponent implements OnInit {
   message = '';
   fileInfos?: Observable<any>;
 
+  userData: UserData = {
+    senderName: "",
+    receiveName: "",
+    connected: false,
+    message: ""
+  }
+  //messages: Message[] = [];
+
+  chat: Chat = {
+    id: 0,
+    topic: '',
+    description: '',
+    status: undefined,
+    user: undefined,
+    sender_name: '',
+    receive_name: '',
+    created_by: 0,
+    created_at: undefined,
+    updated_by: 0,
+    updated_at: undefined
+  }
+
+  user: User = {
+    id: 0,
+    name: '',
+    last_name: '',
+    userName: '',
+    email: '',
+    password: '',
+    document_number: '',
+    phone: '',
+    photo: '',
+    created_by: 0,
+    created_at: '',
+    updated_by: 0,
+    updated_at: '',
+    document_type: null,
+    status: null
+  }
+
+  messages: Message = {
+    id: 0,
+    chat: null,
+    message: '',
+    photo: '',
+    path: '',
+    status: null,
+    created_by: 1,
+    created_at: this.currentDate,
+    updated_by: 1,
+    updated_at: this.currentDate
+  }
 
   constructor(
     private tokenService: TokenService,
@@ -56,16 +101,16 @@ export class ShowComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
   ) { }
 
-  ngOnInit(): void {
-
-    const id = this.activatedRoute.snapshot.params.id;
-
+  ngOnInit(): void {    
     //cuando estes logueado o no
     if (this.tokenService.getToken()) {
+
+      this.getChat();
+      this.getUser();
+
       this.isLogged = true;
       this.userName = this.tokenService.getUserName();
       this.userData.senderName = this.userName;
-      this.userData.receivername = id;
 
       this.client = new Client();
       //asignamos el sock JS al stomp
@@ -80,12 +125,15 @@ export class ShowComponent implements OnInit {
           this.client.subscribe('/chatroom/public', this.callBackPublicMessage);
 
           this.client.subscribe('/user/'+ this.userData.senderName + '/private', this.callBackPrivateMessage);
+          this.chat.receive_name = this.userName;
+          this.chatService.updateChat(this.chat.id, this.chat).subscribe();
           let chatMessage = {
             senderName: this.userData.senderName,
-            receiverName: id,
+            receiveName: this.user.userName,
             message: "",
             status: "JOIN"
           };
+          console.log(chatMessage);
           this.client.publish({destination: '/app/message', body: JSON.stringify(chatMessage)});
           
       }
@@ -101,17 +149,32 @@ export class ShowComponent implements OnInit {
 
   }
 
-  messages: Message = {
-    id: 0,
-    chat: null,
-    message: '',
-    photo: '',
-    path: '',
-    status: null,
-    created_by: 0,
-    created_at: '',
-    updated_by: 0,
-    updated_at: ''
+  getUser() {
+    const idu = this.activatedRoute.snapshot.params.idu;
+    this.chatService.detailUser(idu).subscribe(
+      (data:any) => {
+        this.user = data;
+        console.log('user bean: ',  this.user);
+      },
+      (error:any) => {
+        console.log('user error : ', error);
+      }
+    );
+  }
+
+  getChat(){
+    const idc = this.activatedRoute.snapshot.params.idc;
+    this.chatService.detailChat(idc).subscribe(
+      (data:any) => {
+        this.chat = data;
+        this.messages.chat = this.chat;
+        this.messages.status = this.chat.status;
+        console.log('chat bean: ',  this.chat);
+      },
+      (error:any) => {
+        console.log('chat error : ', error);
+      }
+    );
   }
 
   saveMessage(message: Message){
@@ -182,11 +245,12 @@ export class ShowComponent implements OnInit {
       if(this.client){
         let chatMessage = {
           senderName: this.userData.senderName,
-          receiverName: this.userData.receivername,
+          receiverName: this.user.userName,
           message: this.userData.message,
           status: "MESSAGE"
         };
-
+        this.messages.message = this.userData.message;
+        this.saveMessage(this.messages);
         this.privateChats.get(this.userData.senderName).push(chatMessage);
 
         this.client.publish({destination: '/app/private-message', body: JSON.stringify(chatMessage)});
@@ -194,28 +258,6 @@ export class ShowComponent implements OnInit {
       }
       this.upload()
   }
-
-  newUser: NewUser = {
-    id: 2,
-    name: '',
-    last_name: '',
-    userName: '',
-    email: '',
-    password: '',
-    document_number: '',
-    phone: '',
-    photo: '',
-    created_by: 0,
-    created_at: '',
-    updated_by: 0,
-    updated_at: '',
-    document_type: null,
-    status: null
-  }
-
-
-
-
 
   //file
   file_type: File_type = {
@@ -233,7 +275,7 @@ export class ShowComponent implements OnInit {
   file: Files = {
     description: '',
     path: '',
-    user: this.newUser,
+    user: this.user,
     file_type: this.file_type,
     created_by: 1,
     created_at: '',

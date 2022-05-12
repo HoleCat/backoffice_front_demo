@@ -7,8 +7,8 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { DocumentTypeService } from 'src/app/core/services/document_type.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { ClientComponent } from 'src/app/features/chat/components/client/client.component';
-import { Document_type } from 'src/app/features/chat/directives/interfaces/Document_type';
-import { Status } from 'src/app/features/chat/directives/interfaces/Status';
+import { Document_type } from 'src/app/features/chat/interfaces/Document_type';
+import { Status } from 'src/app/features/chat/interfaces/Status';
 
 @Component({
   selector: 'app-sign-up',

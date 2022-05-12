@@ -32,9 +32,9 @@ export class ShowComponent implements OnInit {
 
   userData: UserData = {
     senderName: "",
-      receivername: "",
-      connected: false,
-      message: ""
+    receiveName: "",
+    connected: false,
+    message: ""
   }
   //messages: Message[] = [];
 
@@ -160,7 +160,7 @@ export class ShowComponent implements OnInit {
       if(this.client){
         let chatMessage = {
           senderName: this.userData.senderName,
-          receiverName: this.userData.receivername,
+          receiverName: this.userData.receiveName,
           message: this.userData.message,
           status: "MESSAGE"
         };

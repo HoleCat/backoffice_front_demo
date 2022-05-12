@@ -1,12 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Client } from '@stomp/stompjs';
+import { Subscription } from 'rxjs';
 import SockJS from 'sockjs-client';
 import { TokenService } from 'src/app/core/services/token.service';
 import { UserData } from 'src/app/features/my-chat/interfaces/TutorialUserData';
-import { Chat } from '../../directives/interfaces/Chat';
-import { Status } from '../../directives/interfaces/Status';
-import { User } from '../../directives/interfaces/User';
-import { ChatService } from '../../directives/services/chat.service';
+import { Chat } from '../../interfaces/Chat';
+import { Message } from '../../interfaces/Message';
+import { Status } from '../../interfaces/Status';
+import { User } from '../../interfaces/User';
+import { ChatService } from '../../services/chat.service';
+import { ClientComponent } from '../client/client.component';
 
 @Component({
   selector: 'app-message-client',
@@ -14,7 +17,20 @@ import { ChatService } from '../../directives/services/chat.service';
   styleUrls: ['./message-client.component.css']
 })
 export class MessageClientComponent implements OnInit {
-
+  //@Input() 
+  chat: Chat = {
+    id: 0,
+    topic: '',
+    description: '',
+    status: null,
+    user: null,
+    sender_name: '',
+    receive_name: '',
+    created_by: 0,
+    created_at: null,
+    updated_by: 0,
+    updated_at: null
+  };
   
   //para el token
   isLogged = false;
@@ -26,15 +42,29 @@ export class MessageClientComponent implements OnInit {
   publicChats = [];
   privateChats = new Map();
   currentDate = new Date();
+
+  messages: Message = {
+    id: 0,
+    chat: null,
+    message: '',
+    photo: '',
+    path: '',
+    status: null,
+    created_by: 1,
+    created_at: this.currentDate,
+    updated_by: 1,
+    updated_at: this.currentDate
+  }
   
   constructor(
     private tokenService: TokenService,
-    private chatService: ChatService
+    private chatService: ChatService,
+    private clientComponent: ClientComponent
   ) { }
 
   userData: UserData = {
     senderName: "",
-    receivername: "",
+    receiveName: "",
     connected: false,
     message: ""
   }
@@ -49,37 +79,31 @@ export class MessageClientComponent implements OnInit {
     status_type: null
   }
 
-  chat: Chat = {
-    id: 0,
-    topic: '',
-    description: '',
-    status: this.status,
-    user: null,
-    sender_name: '',
-    receive_name: '',
-    created_by: 1,
-    created_at: this.currentDate,
-    updated_by: 1,
-    updated_at: this.currentDate,
-  }
-
+  // chat: Chat = {
+  //   id: 0,
+  //   topic: '',
+  //   description: '',
+  //   status: this.status,
+  //   user: null,
+  //   sender_name: '',
+  //   receive_name: '',
+  //   created_by: 1,
+  //   created_at: this.currentDate,
+  //   updated_by: 1,
+  //   updated_at: this.currentDate,
+  // }
+  serviceClientSubscription: Subscription;
   ngOnInit(): void {
-
+    this.serviceClientSubscription = this.chatService.chat$.subscribe(
+      (data:any)=>{
+        this.chat = data;
+      }
+    )
+    console.log('chat !!!', this.chat);
     if (this.tokenService.getToken()) {
       this.isLogged = true;
       this.userName = this.tokenService.getUserName();
-      this.userData.senderName = this.userName;
-
-      this.chatService.userByUsername(this.userName).subscribe(
-        data => {
-          this.chat.user = data;
-          this.chat.sender_name = this.userName;
-          this.chat.topic = "Hola";
-        },
-        err => {
-          console.log(err);
-        }
-      ); 
+      this.userData.senderName = this.userName; 
 
       this.client = new Client();
       
@@ -91,18 +115,41 @@ export class MessageClientComponent implements OnInit {
           this.connected = true;
           this.userData.connected = true;
 
-          this.saveChat(this.chat);
-          console.log(this.chat);
+          if(this.clientComponent.findChat == false){
 
-        //   this.chatService.sendMailAdmin().subscribe(
-        //       data => {
-        //         console.log(data);
-        //         console.log("Email Enviado");
-        //       },
-        //       err => {
-        //         console.log(err);
-        //       }
-        // );
+            this.chatService.userByUsername(this.userName).subscribe(
+              data => {
+                this.chatService.setChat({...this.chat,user: data,sender_name: this.userName, topic: "Hola"});
+                // this.chat.user = data;
+                // this.chat.sender_name = this.userName;
+                // this.chat.topic = "Hola";
+                this.saveChat(this.chat);
+                console.log("Client.component" + this.clientComponent.findChat);
+                console.log(this.chat);
+              },
+              err => {
+                console.log(err);
+              }
+            );
+            
+          }
+          else
+          {
+             //this.findChat(this.userName);
+             this.messages.chat = this.chat;
+             this.messages.status = this.chat.status;
+             console.log(this.messages);
+          };
+
+          // this.chatService.sendMailAdmin().subscribe(
+          //     data => {
+          //       console.log(data);
+          //       console.log("Email Enviado");
+          //     },
+          //     err => {
+          //       console.log(err);
+          //     }
+          // );
 
         this.client.subscribe('/chatroom/public', this.callBackPublicMessage);
         this.client.subscribe('/user/'+ this.userData.senderName + '/private', this.callBackMessage);
@@ -131,6 +178,28 @@ export class MessageClientComponent implements OnInit {
     );
   } 
 
+  saveMessage(message: Message){
+    this.chatService.saveMessage(message).subscribe(
+      (data:any) => {
+        console.log('message: ', data);
+      },
+      (error:any) => {
+        console.log('message error : ', error);
+      }
+    );
+  }
+
+  findChat(userName: string){
+    this.chatService.chatByUser(userName).subscribe(
+      (data:any) => {
+        this.chat = data;
+        console.log('chat find: ',  this.chat);
+      },
+      (error:any) => {
+        console.log('chat error : ', error);
+      }
+    );
+  }
 
   //Se necesita para el funcionamiento del privado
   callBackPublicMessage = (payload:any) => {
@@ -166,8 +235,9 @@ export class MessageClientComponent implements OnInit {
         message: this.userData.message,
         status: "MESSAGE"
       };
-      
-        this.privateChats.get(this.userData.senderName).push(chatMessage);
+      this.messages.message = this.userData.message;
+      this.saveMessage(this.messages);
+      this.privateChats.get(this.userData.senderName).push(chatMessage);
       
       this.client.publish({destination: '/app/private-message', body: JSON.stringify(chatMessage)});
       console.log(chatMessage);
