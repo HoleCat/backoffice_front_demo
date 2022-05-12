@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Chatbot } from '../../directives/interfaces/Chatbot';
-import { ChatService } from '../../directives/services/chat.service';
+import { Chatbot } from '../../interfaces/Chatbot';
+import { ChatService } from '../../services/chat.service';
 
 @Component({
   selector: 'app-create',

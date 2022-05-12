@@ -1,6 +1,6 @@
 export interface UserData{
     senderName: string,
-    receivername: string,
+    receiveName: string,
     connected: boolean,
     message: string
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Chat } from 'src/app/features/chat/directives/interfaces/Chat';
-import { ChatService } from 'src/app/features/chat/directives/services/chat.service';
+import { Chat } from 'src/app/features/chat/interfaces/Chat';
+import { ChatService } from 'src/app/features/chat/services/chat.service';
 
 @Component({
   selector: 'app-index',

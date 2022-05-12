@@ -9,7 +9,7 @@ export interface Message{
     path: string,
     status: Status,
     created_by: number,
-    created_at: string,
+    created_at: Date,
     updated_by: number,
-    updated_at: string
+    updated_at: Date
 }
