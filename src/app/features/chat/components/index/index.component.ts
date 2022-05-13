@@ -26,7 +26,7 @@ export class IndexComponent implements OnInit {
   }
 
   cargarChats(): void {
-    this.chatService.listChats().subscribe(
+    this.chatService.listChatsByStatus(2).subscribe(
       data => {
         this.chats = data;
       },

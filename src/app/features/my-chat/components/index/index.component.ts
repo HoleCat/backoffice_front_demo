@@ -22,7 +22,7 @@ export class IndexComponent implements OnInit {
   }
 
   cargarChats(): void {
-    this.chatService.listChats().subscribe(
+    this.chatService.listChatsByStatus(3).subscribe(
       data => {
         this.chats = data;
       },

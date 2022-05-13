@@ -13,7 +13,7 @@ export class ChatbotService {
 
   //Para chatbot
   public listChatbot(): Observable<Chatbot[]> {
-    return this.httpClient.get<Chatbot[]>(`http://localhost:8092/chatbot/list`);
+    return this.httpClient.get<Chatbot[]>(`http://localhost:8092/chatbot/listByPage`);
   }
 
 
