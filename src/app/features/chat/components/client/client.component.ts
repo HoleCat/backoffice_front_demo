@@ -76,14 +76,14 @@ export class ClientComponent implements OnInit {
     id: 0,
     topic: '',
     description: '',
-    status: undefined,
-    user: undefined,
+    status: null,
+    user: null,
     sender_name: '',
     receive_name: '',
-    created_by: 0,
-    created_at: undefined,
-    updated_by: 0,
-    updated_at: undefined
+    created_by: null,
+    created_at: this.currentDate,
+    updated_by: null,
+    updated_at: this.currentDate
   };
 
   chatServiceSubscription: Subscription;
@@ -97,12 +97,12 @@ export class ClientComponent implements OnInit {
       this.logging = false;
       this.presentation_event();
       
-      this.chatService.chatByUser(this.tokenService.getUserName()).subscribe(
+      this.chatService.chatByToken(this.tokenService.getToken()).subscribe(
         data => {
           if(data != null){
+            this.findChat = true;
             this.chatService.setChat(data);
             //this.chat = data;
-            this.findChat = true;
             this.chat_bot_event();
           }
           else{
@@ -224,16 +224,16 @@ export class ClientComponent implements OnInit {
       this.buttonNext = true;   
     };
     this.question_index = id-1;
-    // console.log(this.answers[id-1].id);
-    // this.chatService.deleteAnswer(this.answers[id-1].id).subscribe(
-    //   data => {
-    //     console.log(data);
-    //     console.log("borrado");
-    //   },
-    //   err => {
-    //     console.log(err);
-    //   }
-    // );
+    console.log(this.answers[id-1].id);
+    this.chatService.deleteAnswer(this.answers[id-1].id).subscribe(
+      data => {
+        console.log(data);
+        console.log("borrado");
+      },
+      err => {
+        console.log(err);
+      }
+    );
   }
 
   nextQuestion(id:number): void{
@@ -249,18 +249,18 @@ export class ClientComponent implements OnInit {
       this.buttonChatbot = true;
       this.buttonNext = false;
     };
-    // this.answer.value1 = this.options.description;
-    // this.answer.options = this.options;
-    // this.chatService.saveAnswer(this.answer).subscribe(
-    //   data => {
-    //     console.log(data);
-    //     this.answer = data;
-    //     this.answers.push(this.answer);
-    //   },
-    //   err => {
-    //     console.log(err);
-    //   }
-    // );
+    this.answer.value1 = this.options.description;
+    this.answer.options = this.options;
+    this.chatService.saveAnswer(this.answer).subscribe(
+      data => {
+        console.log(data);
+        this.answer = data;
+        this.answers.push(this.answer);
+      },
+      err => {
+        console.log(err);
+      }
+    );
     this.question_index = id+1;
   }
 

@@ -18,19 +18,19 @@ import { ClientComponent } from '../client/client.component';
 })
 export class MessageClientComponent implements OnInit {
   //@Input() 
-  chat: Chat = {
-    id: 0,
-    topic: '',
-    description: '',
-    status: null,
-    user: null,
-    sender_name: '',
-    receive_name: '',
-    created_by: 0,
-    created_at: null,
-    updated_by: 0,
-    updated_at: null
-  };
+  // chat: Chat = {
+  //   id: 0,
+  //   topic: '',
+  //   description: '',
+  //   status: null,
+  //   user: null,
+  //   sender_name: '',
+  //   receive_name: '',
+  //   created_by: 0,
+  //   created_at: null,
+  //   updated_by: 0,
+  //   updated_at: null
+  // };
   
   //para el token
   isLogged = false;
@@ -43,7 +43,9 @@ export class MessageClientComponent implements OnInit {
   privateChats = new Map();
   currentDate = new Date();
 
-  messages: Message = {
+  messages: Message[] = []; 
+
+  message: Message = {
     id: 0,
     chat: null,
     message: '',
@@ -70,7 +72,7 @@ export class MessageClientComponent implements OnInit {
   }
 
   status: Status = {
-    id: 1,
+    id: 2,
     description: '',
     created_by: 0,
     created_at: '',
@@ -79,26 +81,29 @@ export class MessageClientComponent implements OnInit {
     status_type: null
   }
 
-  // chat: Chat = {
-  //   id: 0,
-  //   topic: '',
-  //   description: '',
-  //   status: this.status,
-  //   user: null,
-  //   sender_name: '',
-  //   receive_name: '',
-  //   created_by: 1,
-  //   created_at: this.currentDate,
-  //   updated_by: 1,
-  //   updated_at: this.currentDate,
-  // }
+  chat: Chat = {
+    id: 0,
+    topic: '',
+    description: '',
+    status: this.status,
+    user: null,
+    sender_name: '',
+    receive_name: '',
+    created_by: null,
+    created_at: this.currentDate,
+    updated_by: null,
+    updated_at: this.currentDate,
+  };
+
   serviceClientSubscription: Subscription;
   ngOnInit(): void {
+    
     this.serviceClientSubscription = this.chatService.chat$.subscribe(
       (data:any)=>{
         this.chat = data;
       }
     )
+
     console.log('chat !!!', this.chat);
     if (this.tokenService.getToken()) {
       this.isLogged = true;
@@ -117,12 +122,14 @@ export class MessageClientComponent implements OnInit {
 
           if(this.clientComponent.findChat == false){
 
+            //Arreglar para el token
             this.chatService.userByUsername(this.userName).subscribe(
               data => {
-                this.chatService.setChat({...this.chat,user: data,sender_name: this.userName, topic: "Hola"});
+                this.chatService.setChat({...this.chat,user: data,sender_name: this.userName, topic: "Hola", created_by: data, updated_by: data,updated_at: this.currentDate, created_at: this.currentDate, status: this.status});
                 // this.chat.user = data;
                 // this.chat.sender_name = this.userName;
                 // this.chat.topic = "Hola";
+                //cambios
                 this.saveChat(this.chat);
                 console.log("Client.component" + this.clientComponent.findChat);
                 console.log(this.chat);
@@ -136,9 +143,10 @@ export class MessageClientComponent implements OnInit {
           else
           {
              //this.findChat(this.userName);
-             this.messages.chat = this.chat;
-             this.messages.status = this.chat.status;
-             console.log(this.messages);
+             this.listMessageByChat(this.chat.id);
+             this.message.chat = this.chat;
+             this.message.status = this.chat.status;
+             console.log(this.message);
           };
 
           // this.chatService.sendMailAdmin().subscribe(
@@ -165,7 +173,19 @@ export class MessageClientComponent implements OnInit {
       }
       this.client.activate();
     }
- }
+  }
+
+  listMessageByChat(id: number){
+    this.chatService.listMessagesByChat(id).subscribe(
+      (data:any) => {
+        this.messages = data;
+        console.log('message: ', data);
+      },
+      (error:any) => {
+        console.log('message error : ', error);
+      }
+   );
+  }
 
   saveChat(chat: Chat){
     this.chatService.saveChat(chat).subscribe(
@@ -189,8 +209,8 @@ export class MessageClientComponent implements OnInit {
     );
   }
 
-  findChat(userName: string){
-    this.chatService.chatByUser(userName).subscribe(
+  findChat(token: string){
+    this.chatService.chatByToken(token).subscribe(
       (data:any) => {
         this.chat = data;
         console.log('chat find: ',  this.chat);
@@ -235,8 +255,8 @@ export class MessageClientComponent implements OnInit {
         message: this.userData.message,
         status: "MESSAGE"
       };
-      this.messages.message = this.userData.message;
-      this.saveMessage(this.messages);
+      this.message.message = this.userData.message;
+      this.saveMessage(this.message);
       this.privateChats.get(this.userData.senderName).push(chatMessage);
       
       this.client.publish({destination: '/app/private-message', body: JSON.stringify(chatMessage)});

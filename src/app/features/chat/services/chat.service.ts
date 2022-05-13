@@ -22,9 +22,9 @@ export class ChatService {
     user: null,
     sender_name: '',
     receive_name: '',
-    created_by: 0,
+    created_by: null,
     created_at: null,
-    updated_by: 0,
+    updated_by: null,
     updated_at: null
   });
   public chat$ = this.chat.asObservable();
@@ -40,12 +40,12 @@ export class ChatService {
     return this.httpClient.get<Chat[]>('http://localhost:8092/chat/list');
   }
 
-  public listChatsByUser(id_user: number): Observable<Chat[]> {
-    return this.httpClient.get<Chat[]>(`http://localhost:8092/chat/list/${id_user}`);
+  public listChatsByStatus(status: number): Observable<Chat[]> {
+    return this.httpClient.get<Chat[]>(`http://localhost:8092/chat/listByStatus/${status}`);
   }
 
-  public chatByUser(userName: string): Observable<Chat> {
-    return this.httpClient.get<Chat>(`http://localhost:8092/chat/detailUsername/${userName}`);
+  public chatByToken(token: string): Observable<Chat> {
+    return this.httpClient.get<Chat>(`http://localhost:8092/chat/detailByToken/${token}`);
   }
 
   public detailChat(id: number): Observable<Chat> {
@@ -62,8 +62,11 @@ export class ChatService {
 
   // Para Message
   public saveMessage(obj:Message):Observable<any>{
-    //here i need to add a post request
     return this.httpClient.post('http://localhost:8092/message/create', obj);
+  }
+
+  public listMessagesByChat(id: number): Observable<Message[]> {
+    return this.httpClient.get<Message[]>(`http://localhost:8092/message/list/${id}`);
   }
 
   //Para chatbot

@@ -9,8 +9,8 @@ export interface Chat {
     user: User,
     sender_name: string,
     receive_name: string,
-    created_by: number,
+    created_by: User,
     created_at: Date,
-    updated_by: number,
+    updated_by: User,
     updated_at: Date
 }

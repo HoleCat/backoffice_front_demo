@@ -1,6 +1,5 @@
-import { Status } from "../../chatbot/interfaces/Status";
 import { Chat } from "./Chat";
-
+import { Status } from "./Status";
 
 export interface Message{
     id: number,
@@ -8,9 +7,9 @@ export interface Message{
     message: string,
     photo: string,
     path: string,
-    status3: Status,
+    status: Status,
     created_by: number,
-    created_at: string,
+    created_at: Date,
     updated_by: number,
-    updated_at: string
+    updated_at: Date
 }
