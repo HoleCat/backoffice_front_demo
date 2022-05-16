@@ -38,9 +38,9 @@ export class SignUpComponent implements OnInit {
   status: Status = {
     id: 2,
     description: '',
-    created_by: 0,
+    created_by: null,
     created_at: '',
-    updated_by: 0,
+    updated_by: null,
     updated_at: '',
     status_type: null
   }

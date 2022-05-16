@@ -5,9 +5,7 @@ import { Files } from 'src/app/features/my-chat/interfaces/File';
 import { Answer } from '../interfaces/Answer';
 import { Chat } from '../interfaces/Chat';
 import { Chatbot } from '../interfaces/Chatbot';
-import { Chatbot_question } from '../interfaces/Chatbot_question';
 import { Message } from '../interfaces/Message';
-import { Question_options } from '../interfaces/Question_options';
 import { User } from '../interfaces/User';
 
 @Injectable({

@@ -109,9 +109,9 @@ message: Message = {
   photo: '',
   path: '',
   status: null,
-  created_by: 1,
+  created_by: null,
   created_at: this.currentDate,
-  updated_by: 1,
+  updated_by: null,
   updated_at: this.currentDate
 }
 
@@ -148,7 +148,7 @@ ngOnInit(): void {
         this.client.subscribe('/user/'+ this.userData.senderName + '/private', this.callBackPrivateMessage);
         this.chatService.userByUsername(this.userName).subscribe(
           data => {
-            this.updated_by = data;
+            // this.updated_by = data;
             this.chat.updated_by = this.updated_by;
             this.chat.receive_name = this.userName;
             this.chat.status.id = 3;

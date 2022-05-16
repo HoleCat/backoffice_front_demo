@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Document_type } from '../interfaces/Document_type';
+import { Document_type } from 'src/app/features/chat/interfaces/Document_type';
 
 @Injectable({
   providedIn: 'root'

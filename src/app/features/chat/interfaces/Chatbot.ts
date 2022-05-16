@@ -8,9 +8,9 @@ export interface Chatbot{
     description: string,
     status: Status,
     user: User,
-    created_by: number,
+    created_by: User,
     created_at: string,
-    updated_by: number,
+    updated_by: User,
     updated_at: string,
     questions: Question[]
 }

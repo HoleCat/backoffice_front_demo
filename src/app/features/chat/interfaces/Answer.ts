@@ -1,12 +1,13 @@
 import { Options } from "./Options";
 import { Status } from "./Status";
+import { User } from "./User";
 
 export interface Answer {
     id: number,
 	description: string,
-	created_by: number,
+	created_by: User,
     created_at: Date,
-    updated_by: number,
+    updated_by: User,
     updated_at: Date,
 	value1: string;
 	value2: number;

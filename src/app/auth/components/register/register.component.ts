@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Document_type } from 'src/app/core/interfaces/Document_type';
 import { LoginUser } from 'src/app/core/interfaces/LoginUser';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { DocumentTypeService } from 'src/app/core/services/document_type.service';
 import { TokenService } from 'src/app/core/services/token.service';
-import { Status } from 'src/app/features/chatbot/interfaces/Status';
+import { Document_type } from 'src/app/features/chat/interfaces/Document_type';
+import { Status } from 'src/app/features/chat/interfaces/Status';
 
 @Component({
   selector: 'app-register',
@@ -36,10 +36,11 @@ export class RegisterComponent implements OnInit {
   status: Status = {
     id: 2,
     description: '',
-    created_by: 0,
+    created_by: null,
     created_at: '',
-    updated_by: 0,
-    updated_at: ''
+    updated_by: null,
+    updated_at: '',
+    status_type: null
   }
 
   ngOnInit(): void {
@@ -64,21 +65,7 @@ export class RegisterComponent implements OnInit {
       updated_by: [1,[Validators.required]],
       updated_at: [this.currentDate,[Validators.required]],
       document_type: ['',[Validators.required]],
-      status: [this.status,[Validators.required]],
-      // dni: [
-      //   null,
-      //   [
-      //     Validators.required,
-      //     Validators.minLength(8),
-      //     Validators.maxLength(10)
-      //   ]
-      // ],
-      // agree: [
-      //   false,
-      //   [
-      //     Validators.requiredTrue
-      //   ]
-      // ]
+      status: [this.status,[Validators.required]]
     });
   }
 
@@ -123,29 +110,4 @@ export class RegisterComponent implements OnInit {
         }
       );
     }
-
-    // async login() {
-    //   console.log('login existoso');
-    //   this.loading = true;
-    //   const formValue = this.myForm.value;
-    //   this.authService.login(formValue).subscribe(
-    //     data =>{
-    //       this.isLogged =true;
-    //       this.isLoginFail=false;
-  
-    //       this.tokenService.setToken(data.token);
-    //       this.tokenService.setUserName(data.userName);
-    //       this.tokenService.setAuthorities(data.authorities);
-    //       this.roles = data.authorities;
-    //       this.router.navigate(["/dashboard/my-chat/index"])
-    //     },
-    //     err =>{
-    //       this.isLogged = false;
-    //       this.isLoginFail= true;
-    //       this.errMsj = err.error.mensaje;
-    //       console.log(err.error.message);
-          
-    //     }
-    //   );
-    // }
 }
