@@ -1,5 +1,6 @@
 import { Chat } from "./Chat";
 import { Status } from "./Status";
+import { User } from "./User";
 
 export interface Message{
     id: number,
@@ -8,8 +9,8 @@ export interface Message{
     photo: string,
     path: string,
     status: Status,
-    created_by: number,
+    created_by: User,
     created_at: Date,
-    updated_by: number,
+    updated_by: User,
     updated_at: Date
 }

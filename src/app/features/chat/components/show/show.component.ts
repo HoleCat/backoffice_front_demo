@@ -55,12 +55,8 @@ export class ShowComponent implements OnInit {
     document_number: '',
     phone: '',
     photo: '',
-    created_by: 0,
     created_at: '',
-    updated_by: 0,
     updated_at: '',
-    document_type: null,
-    status: null
   }
 
   constructor(

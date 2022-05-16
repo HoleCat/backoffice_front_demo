@@ -52,9 +52,9 @@ export class MessageClientComponent implements OnInit {
     photo: '',
     path: '',
     status: null,
-    created_by: 1,
+    created_by: null,
     created_at: this.currentDate,
-    updated_by: 1,
+    updated_by: null,
     updated_at: this.currentDate
   }
   
@@ -74,9 +74,9 @@ export class MessageClientComponent implements OnInit {
   status: Status = {
     id: 2,
     description: '',
-    created_by: 0,
+    created_by: null,
     created_at: '',
-    updated_by: 0,
+    updated_by: null,
     updated_at: '',
     status_type: null
   }

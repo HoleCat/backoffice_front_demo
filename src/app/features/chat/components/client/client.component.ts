@@ -7,9 +7,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { DocumentTypeService } from 'src/app/core/services/document_type.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { Chatbot } from '../../interfaces/Chatbot';
-import { Chatbot_question } from '../../interfaces/Chatbot_question';
 import { Document_type } from 'src/app/core/interfaces/Document_type';
-import { Question_options } from '../../interfaces/Question_options';
 import { Status } from '../../interfaces/Status';
 import { ChatService } from '../../services/chat.service';
 import { Options } from '../../interfaces/Options';
@@ -169,9 +167,9 @@ export class ClientComponent implements OnInit {
     id: 0,
     description: '',
     order_number: 0,
-    created_by: 0,
+    created_by: null,
     created_at: '',
-    updated_by: 0,
+    updated_by: null,
     updated_at: '',
     option_type: null
   }
@@ -179,9 +177,9 @@ export class ClientComponent implements OnInit {
   status: Status = {
     id: 1,
     description: '',
-    created_by: 0,
+    created_by: null,
     created_at: '',
-    updated_by: 0,
+    updated_by: null,
     updated_at: '',
     status_type: null
   }
@@ -189,9 +187,9 @@ export class ClientComponent implements OnInit {
   answer: Answer = {
     id: 0,
     description: '',
-    created_by: 1,
+    created_by: null,
     created_at: this.currentDate,
-    updated_by: 1,
+    updated_by: null,
     updated_at: this.currentDate,
     value1: '',
     value2: 0,
@@ -206,9 +204,9 @@ export class ClientComponent implements OnInit {
     description: '',
     status: undefined,
     user: undefined,
-    created_by: 0,
+    created_by: null,
     created_at: '',
-    updated_by: 0,
+    updated_by: null,
     updated_at: '',
     questions: []
   }
