@@ -7,6 +7,8 @@ import { DocumentTypeService } from 'src/app/core/services/document_type.service
 import { TokenService } from 'src/app/core/services/token.service';
 import { Document_type } from 'src/app/features/chat/interfaces/Document_type';
 import { Status } from 'src/app/features/chat/interfaces/Status';
+import { User } from 'src/app/features/chat/interfaces/User';
+import { UserData } from 'src/app/features/chat/interfaces/UserData';
 
 @Component({
   selector: 'app-register',
@@ -83,6 +85,39 @@ export class RegisterComponent implements OnInit {
     password: ''
   }
 
+  user: User = {
+    id: 0,
+    name: '',
+    last_name: '',
+    userName: '',
+    email: '',
+    password: '',
+    document_number: '',
+    phone: '',
+    photo: '',
+    created_at: '',
+    updated_at: ''
+  }
+
+  userData: UserData = {
+    id: 0,
+    user: null,
+    document_type: null,
+    status: null,
+    created_by: null,
+    updated_by: null
+  }
+
+  document_type: Document_type = {
+    id: 0,
+    description: '',
+    short_description: '',
+    created_by: null,
+    created_at: '',
+    updated_by: null,
+    updated_at: ''
+  }
+
     //Form State
     loading = false;
     success = false;
@@ -93,13 +128,27 @@ export class RegisterComponent implements OnInit {
       const formValue = this.myForm.value;
       this.authService.register(formValue).subscribe(
         data =>{
+          this.user = data;
+          console.log(this.user);
           this.isLogged =true;
           this.isLoginFail=false;
+          this.document_type = this.myForm.controls['document_type'].value;
+          console.log(this.document_type);
   
-          this.tokenService.setToken(data.token);
-          this.tokenService.setUserName(data.userName);
-          this.tokenService.setAuthorities(data.authorities);
-          this.roles = data.authorities;
+          // this.tokenService.setToken(data.token);
+          // this.tokenService.setUserName(data.userName);
+          // this.tokenService.setAuthorities(data.authorities);
+          // this.roles = data.authorities;
+          this.userData.user = this.user;
+          this.userData.document_type = this.document_type;
+          this.authService.registreUserData(this.userData).subscribe(
+            data => {
+              console.log(data);
+            },
+            err => {
+              console.log(err);
+            }
+          );
         },
         err =>{
           this.isLogged = false;
