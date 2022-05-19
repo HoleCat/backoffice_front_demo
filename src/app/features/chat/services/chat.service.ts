@@ -6,6 +6,7 @@ import { Answer } from '../interfaces/Answer';
 import { Chat } from '../interfaces/Chat';
 import { Chatbot } from '../interfaces/Chatbot';
 import { Message } from '../interfaces/Message';
+import { Question } from '../interfaces/Question';
 import { User } from '../interfaces/User';
 
 @Injectable({
@@ -78,6 +79,11 @@ export class ChatService {
 
   public listChatbotById(id: number): Observable<Chatbot> {
     return this.httpClient.get<Chatbot>(`http://localhost:8092/chatbot/detail/${id}`);
+  }
+
+  //Para question
+  public detailQuestion(id: number): Observable<Question> {
+    return this.httpClient.get<Question>(`http://localhost:8092/question/detail/${id}`);
   }
 
   //Para Answer

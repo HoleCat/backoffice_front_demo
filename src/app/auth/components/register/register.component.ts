@@ -128,17 +128,14 @@ export class RegisterComponent implements OnInit {
       const formValue = this.myForm.value;
       this.authService.register(formValue).subscribe(
         data =>{
+          this.loginUser.userName = this.userName.value;
+          this.loginUser.password = this.password.value;
+          
           this.user = data;
           console.log(this.user);
-          this.isLogged =true;
-          this.isLoginFail=false;
           this.document_type = this.myForm.controls['document_type'].value;
           console.log(this.document_type);
   
-          // this.tokenService.setToken(data.token);
-          // this.tokenService.setUserName(data.userName);
-          // this.tokenService.setAuthorities(data.authorities);
-          // this.roles = data.authorities;
           this.userData.user = this.user;
           this.userData.document_type = this.document_type;
           this.authService.registreUserData(this.userData).subscribe(
@@ -149,6 +146,33 @@ export class RegisterComponent implements OnInit {
               console.log(err);
             }
           );
+
+          this.login();
+        },
+        err =>{
+          this.isLogged = false;
+          this.isLoginFail= true;
+          this.errMsj = err.error.mensaje;
+          console.log(err.error.message);
+          
+        }
+      );
+    }
+
+    login(){
+      console.log('login existoso');
+      this.loading = true;
+      
+      this.authService.login(this.loginUser).subscribe(
+        data =>{
+          this.isLogged =true;
+          this.isLoginFail=false;
+
+          this.tokenService.setToken(data.token);
+          this.tokenService.setUserName(data.userName);
+          this.tokenService.setAuthorities(data.authorities);
+          this.roles = data.authorities;
+          this.router.navigate(["/dashboard/my-chat/index"]);
         },
         err =>{
           this.isLogged = false;

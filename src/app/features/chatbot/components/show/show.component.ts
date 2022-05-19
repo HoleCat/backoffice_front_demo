@@ -28,10 +28,6 @@ export class ShowComponent implements OnInit {
 
   //LISTBYID_USER
   chatbot: Chatbot = null;
-  chatbot_questions: Chatbot_question[] = [];
-  question_options: Question_options[] = [];
-  question_types: Question_type[] = [];
-  option_types: Option_type[] = [];
   currentDate = new Date();
 
   //formulario de Question
@@ -71,12 +67,11 @@ export class ShowComponent implements OnInit {
 
     //cuando estes logueado o no
     if (this.tokenService.getToken()) {
-      this.cargarQuestions();
       const id :number = this.activatedRoute.snapshot.params.id;
       
       this.chatService.listChatbotById(id).subscribe(data=>this.chatbot=data);
-      this.question_typeService.listQuestion_type().subscribe(data=>this.question_types=data);
-      this.option_typeService.listOption_type().subscribe(data=>this.option_types=data);
+      // this.question_typeService.listQuestion_type().subscribe(data=>this.question_types=data);
+      // this.option_typeService.listOption_type().subscribe(data=>this.option_types=data);
       
       this.isLogged = true;
       this.userName = this.tokenService.getUserName();
@@ -118,30 +113,6 @@ export class ShowComponent implements OnInit {
   get description() { return this.formQuestion.get('description');}
   get question_type() { return this.formQuestion.get('question_type');}
 
-  cargarQuestions(): void {
-    const id = this.activatedRoute.snapshot.params.id;
-    this.questionService.listQuestionByChatbot(id).subscribe(
-      data => {
-        this.chatbot_questions = data;
-      },
-      err => {
-        console.log(err);
-      }
-    );
-  }
-
-  cargarOptions(id: number): void {
-    this.optionsService.listOptionByQuestion(id).subscribe(
-      data => {
-        this.question_options = data;
-        this.question.id = id;
-      },
-      err => {
-        console.log(err);
-      }
-    );
-  }
-
   questionSubscription: Subscription
 
   questionRegister(): void{
@@ -174,10 +145,10 @@ export class ShowComponent implements OnInit {
     order_number: 0
   }
 
-  optionSubscription: Subscription
+  chatbotSubscription: Subscription
   optionRegister(): void{
-    if(this.optionSubscription != undefined) (this.optionSubscription.unsubscribe());
-    this.optionSubscription = this.optionsService.saveOption(this.formOption.value).subscribe(
+    if(this.chatbotSubscription != undefined) (this.chatbotSubscription.unsubscribe());
+    this.chatbotSubscription = this.optionsService.saveOption(this.formOption.value).subscribe(
       (data:any) => {
         console.log('option registrado : ', data);
         console.log('id : ' + this.question.id)
@@ -191,11 +162,23 @@ export class ShowComponent implements OnInit {
     );
   }
 
-  chatbot_questionRegister(){
-    if(this.optionSubscription != undefined) (this.optionSubscription.unsubscribe());
-    this.optionSubscription = this.chatbotService.saveChatbotQuestion(this.chatbot_question).subscribe(
+  cargarOptions(id: number){
+    if(this.chatbotSubscription != undefined) (this.chatbotSubscription.unsubscribe());
+    this.chatbotSubscription = this.chatService.detailQuestion(id).subscribe(
       (data:any) => {
-        this.chatbot_questions.push(data);
+        this.question = data;
+        console.log('Question encontrado : ', data);
+      },
+      (error:any) => {
+        console.log('Question error : ', error);
+      }
+    );
+  }
+
+  chatbot_questionRegister(){
+    if(this.chatbotSubscription != undefined) (this.chatbotSubscription.unsubscribe());
+    this.chatbotSubscription = this.chatbotService.saveChatbotQuestion(this.chatbot_question).subscribe(
+      (data:any) => {
         console.log('chat_questionRegister registrado : ', data);
       },
       (error:any) => {
@@ -205,10 +188,9 @@ export class ShowComponent implements OnInit {
   }
 
   question_optionsRegister(){
-    if(this.optionSubscription != undefined) (this.optionSubscription.unsubscribe());
-    this.optionSubscription = this.questionService.saveQuestionOptions(this.question_option).subscribe(
+    if(this.chatbotSubscription != undefined) (this.chatbotSubscription.unsubscribe());
+    this.chatbotSubscription = this.questionService.saveQuestionOptions(this.question_option).subscribe(
       (data:any) => {
-        this.question_options.push(data);
         console.log('question_optionRegister registrado : ', data);
       },
       (error:any) => {
@@ -220,10 +202,11 @@ export class ShowComponent implements OnInit {
   
 
   subirQuestion(bean: Question){
-    if(this.optionSubscription != undefined) (this.optionSubscription.unsubscribe());
-    this.optionSubscription = this.questionService.updateSubirQuestion(bean.id, bean).subscribe(
+    bean.order_number = bean.order_number+1;
+    console.log(bean);
+    if(this.chatbotSubscription != undefined) (this.chatbotSubscription.unsubscribe());
+    this.chatbotSubscription = this.questionService.updateSubirQuestion(bean.id, bean).subscribe(
       (data:any) => {
-        this.question_options.push(data);
         console.log('order_number actualizado : ', data);
       },
       (error:any) => {
@@ -233,10 +216,9 @@ export class ShowComponent implements OnInit {
   }
 
   bajarQuestion(bean: Question){
-    if(this.optionSubscription != undefined) (this.optionSubscription.unsubscribe());
-    this.optionSubscription = this.questionService.updateBajarQuestion(bean.id, bean).subscribe(
+    if(this.chatbotSubscription != undefined) (this.chatbotSubscription.unsubscribe());
+    this.chatbotSubscription = this.questionService.updateBajarQuestion(bean.id, bean).subscribe(
       (data:any) => {
-        this.question_options.push(data);
         console.log('order_number actualizado : ', data);
       },
       (error:any) => {
@@ -246,10 +228,9 @@ export class ShowComponent implements OnInit {
   }
 
   subirOption(bean: Options){
-    if(this.optionSubscription != undefined) (this.optionSubscription.unsubscribe());
-    this.optionSubscription = this.optionsService.updateSubirOption(bean.id, bean).subscribe(
+    if(this.chatbotSubscription != undefined) (this.chatbotSubscription.unsubscribe());
+    this.chatbotSubscription = this.optionsService.updateSubirOption(bean.id, bean).subscribe(
       (data:any) => {
-        this.question_options.push(data);
         console.log('order_number actualizado : ', data);
       },
       (error:any) => {
@@ -259,10 +240,9 @@ export class ShowComponent implements OnInit {
   }
 
   bajarOption(bean: Options){
-    if(this.optionSubscription != undefined) (this.optionSubscription.unsubscribe());
-    this.optionSubscription = this.optionsService.updateBajarOption(bean.id, bean).subscribe(
+    if(this.chatbotSubscription != undefined) (this.chatbotSubscription.unsubscribe());
+    this.chatbotSubscription = this.optionsService.updateBajarOption(bean.id, bean).subscribe(
       (data:any) => {
-        this.question_options.push(data);
         console.log('order_number actualizado : ', data);
       },
       (error:any) => {
