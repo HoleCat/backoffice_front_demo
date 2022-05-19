@@ -45,17 +45,14 @@
             </div> 
             
             <div *ngIf="buttonChatbot">
-              <button mat-raised-button color="primary" (click)="chat_bot_event(question_index)">
+              <button mat-raised-button color="primary" (click)="chat_bot_event()">
                 chat bot button
               </button>
             </div>
           </div>
           <div class="w-full text-center" *ngIf="page_index == 2">
             <form>
-              <app-message-client
-              [chat]="chat">
-
-              </app-message-client>
+              <app-message-client [chat]="chat"></app-message-client>
               <!-- <div class="messages">
                 <app-message
                 *ngFor="let message of messages"

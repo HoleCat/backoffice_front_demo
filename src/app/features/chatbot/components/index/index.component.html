@@ -16,9 +16,9 @@
         <tr *ngFor="let chatbot of chatbots">
           <td>{{chatbot.id}}</td>
           <td>{{chatbot.description}}</td>
-          <td>{{chatbot.created_by}}</td>
+          <td>{{chatbot.created_by.userName}}</td>
           <td>{{chatbot.created_at}}</td>
-          <td>{{chatbot.updated_by}}</td>
+          <td>{{chatbot.updated_by.userName}}</td>
           <td>{{chatbot.updated_at}}</td>
           <td><button class="btn btn-outline-warning" routerLink="/dashboard/chatbot/show/{{chatbot.id}}"><i class="far fa-edit"></i>Agregar Pregunta</button></td>
         </tr>

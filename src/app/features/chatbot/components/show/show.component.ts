@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { TokenService } from 'src/app/core/services/token.service';
 import { Chat } from 'src/app/features/my-chat/interfaces/Chat';
-import { Chatbot } from '../../interfaces/Chatbot';
 import { Chatbot_question } from '../../interfaces/Chatbot_question';
 import { Option_type } from '../../interfaces/Option_type';
 import { Question } from '../../interfaces/Question';
@@ -17,6 +16,8 @@ import { OptionsService } from '../../services/options.service';
 import { QuestionTypeService } from '../../services/question-type.service';
 import { QuestionService } from '../../services/question.service';
 import { Options } from '../../interfaces/Options';
+import { Chatbot } from 'src/app/features/chat/interfaces/Chatbot';
+import { ChatService } from 'src/app/features/chat/services/chat.service';
 
 @Component({
   selector: 'app-show',
@@ -26,7 +27,7 @@ import { Options } from '../../interfaces/Options';
 export class ShowComponent implements OnInit {
 
   //LISTBYID_USER
-  chatbot1: Chatbot = null;
+  chatbot: Chatbot = null;
   chatbot_questions: Chatbot_question[] = [];
   question_options: Question_options[] = [];
   question_types: Question_type[] = [];
@@ -45,6 +46,7 @@ export class ShowComponent implements OnInit {
 
   constructor(
     private chatbotService: ChatbotService,
+    private chatService: ChatService,
     private questionService: QuestionService,
     private optionsService: OptionsService,
     private fb: FormBuilder,
@@ -72,7 +74,7 @@ export class ShowComponent implements OnInit {
       this.cargarQuestions();
       const id :number = this.activatedRoute.snapshot.params.id;
       
-      this.chatbotService.listChatbotById(id).subscribe(data=>this.chatbot1=data);
+      this.chatService.listChatbotById(id).subscribe(data=>this.chatbot=data);
       this.question_typeService.listQuestion_type().subscribe(data=>this.question_types=data);
       this.option_typeService.listOption_type().subscribe(data=>this.option_types=data);
       
@@ -141,14 +143,7 @@ export class ShowComponent implements OnInit {
   }
 
   questionSubscription: Subscription
-  chatbot: Chatbot = {
-    id: 0,
-    description: '',
-    created_by: 0,
-    created_at: '',
-    updated_by: 0,
-    updated_at: ''
-  }
+
   questionRegister(): void{
     if(this.questionSubscription != undefined) (this.questionSubscription.unsubscribe());
     this.questionSubscription = this.questionService.saveQuestion(this.formQuestion.value).subscribe(
@@ -158,7 +153,6 @@ export class ShowComponent implements OnInit {
         console.log('question registrado : ', data);
         this.chatbot_question.question = data;
         this.chatbot.id = id;
-        this.chatbot_question.chatbot = this.chatbot;
         this.chatbot_questionRegister();
       },
       (error:any) => {

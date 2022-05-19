@@ -38,7 +38,7 @@ export class ChatService {
     return this.httpClient.get<Chat[]>('http://localhost:8092/chat/list');
   }
 
-  public listChatsByStatus(status: number): Observable<Chat[]> {
+  public listChatsByStatus(status: string): Observable<Chat[]> {
     return this.httpClient.get<Chat[]>(`http://localhost:8092/chat/listByStatus/${status}`);
   }
 
@@ -76,6 +76,10 @@ export class ChatService {
     return this.httpClient.get<Chatbot>(`http://localhost:8092/chatbot/publicado`);
   }
 
+  public listChatbotById(id: number): Observable<Chatbot> {
+    return this.httpClient.get<Chatbot>(`http://localhost:8092/chatbot/detail/${id}`);
+  }
+
   //Para Answer
   public saveAnswer(obj: Answer): Observable<any>{
     return this.httpClient.post('http://localhost:8092/answer/create', obj);
@@ -91,8 +95,8 @@ export class ChatService {
   }
 
   //Para user
-  public userByUsername(username: string): Observable<User> {
-    return this.httpClient.get<User>(`http://localhost:8092/auth/byusername/${username}`);
+  public userByToken(token: string): Observable<User> {
+    return this.httpClient.get<User>(`http://localhost:8092/auth/byToken/${token}`);
   }
 
   public detailUser(id: number): Observable<User>{

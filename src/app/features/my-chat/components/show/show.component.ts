@@ -12,10 +12,12 @@ import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { UploadFilesService } from '../../services/uploadFiles.service';
 import { ActivatedRoute } from '@angular/router';
 import { ChatService } from 'src/app/features/chat/services/chat.service';
-import { User } from '../../interfaces/User';
 import { Chat } from 'src/app/features/chat/interfaces/Chat';
 import { Message } from 'src/app/features/chat/interfaces/Message';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { Status_type } from 'src/app/features/chat/interfaces/Status_type';
+import { Status } from 'src/app/features/chat/interfaces/Status';
+import { User } from 'src/app/features/chat/interfaces/User';
 
 @Component({
   selector: 'app-show',
@@ -52,6 +54,16 @@ userData: UserData = {
   message: ""
 }
 
+status: Status = {
+  id: 3,
+  description: '',
+  created_by: null,
+  created_at: '',
+  updated_by: null,
+  updated_at: '',
+  status_type: null
+}
+
 chat: Chat = {
   id: 0,
   topic: '',
@@ -76,30 +88,8 @@ user: User = {
   document_number: '',
   phone: '',
   photo: '',
-  created_by: 0,
   created_at: '',
-  updated_by: 0,
-  updated_at: '',
-  document_type: null,
-  status: null
-}
-
-updated_by: User = {
-  id: 0,
-  name: '',
-  last_name: '',
-  userName: '',
-  email: '',
-  password: '',
-  document_number: '',
-  phone: '',
-  photo: '',
-  created_by: 0,
-  created_at: '',
-  updated_by: 0,
-  updated_at: '',
-  document_type: null,
-  status: null
+  updated_at: ''
 }
 
 message: Message = {
@@ -146,22 +136,32 @@ ngOnInit(): void {
         this.client.subscribe('/chatroom/public', this.callBackPublicMessage);
 
         this.client.subscribe('/user/'+ this.userData.senderName + '/private', this.callBackPrivateMessage);
-        this.chatService.userByUsername(this.userName).subscribe(
+
+        this.chatService.userByToken(this.tokenService.getToken()).subscribe(
           data => {
-            // this.updated_by = data;
-            this.chat.updated_by = this.updated_by;
+            this.message.created_by = data;
+            this.message.updated_by = data;
+            this.chat.updated_by = data;
             this.chat.receive_name = this.userName;
-            this.chat.status.id = 3;
-            this.chatService.updateChat(this.chat.id, this.chat).subscribe();
-            console.log("updated_by:" + this.updated_by);
+            this.chat.status = this.status;
+            this.chatService.updateChat(this.chat.id, this.chat).subscribe(
+              (data:any) => {
+                console.log('chat actualizado: ',  data);
+              },
+              (error:any) => {
+                console.log('chat error : ', error);
+              }
+            );
+            
           },
           err => {
             console.log(err);
           }
         );
+        
         let chatMessage = {
           senderName: this.userData.senderName,
-          receiveName: this.user.userName,
+          receiverName: this.user.userName,
           message: "",
           status: "JOIN"
         };
@@ -293,6 +293,8 @@ sendPrivateMessage(): void{
         message: this.userData.message,
         status: "MESSAGE"
       };
+      this.message.created_by = this.user;
+      this.message.updated_by = this.user;
       this.message.message = this.userData.message;
       this.saveMessage(this.message);
       this.privateChats.get(this.userData.senderName).push(chatMessage);

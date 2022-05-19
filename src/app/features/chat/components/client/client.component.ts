@@ -17,6 +17,7 @@ import { element } from 'protractor';
 import { Chat } from '../../interfaces/Chat';
 import { MessageClientComponent } from '../message-client/message-client.component';
 import { Subscription } from 'rxjs';
+import { User } from '../../interfaces/User';
 
 @Component({
   selector: 'app-client',
@@ -64,10 +65,6 @@ export class ClientComponent implements OnInit {
   constructor(
     private chatService: ChatService,
     private tokenService: TokenService,
-    private authService: AuthService,
-    private router: Router,
-    private fb: FormBuilder,
-    private document_typeService: DocumentTypeService
   ) { }
 
   chat: Chat =  {
@@ -84,6 +81,20 @@ export class ClientComponent implements OnInit {
     updated_at: this.currentDate
   };
 
+  user: User = {
+    id: 0,
+    name: '',
+    last_name: '',
+    userName: '',
+    email: '',
+    password: '',
+    document_number: '',
+    phone: '',
+    photo: '',
+    created_at: '',
+    updated_at: ''
+  };
+
   chatServiceSubscription: Subscription;
   ngOnInit(): void {
     this.chatServiceSubscription = this.chatService.chat$.subscribe(
@@ -93,8 +104,6 @@ export class ClientComponent implements OnInit {
     );
     if(this.tokenService.getToken()){
       this.logging = false;
-      this.presentation_event();
-      
       this.chatService.chatByToken(this.tokenService.getToken()).subscribe(
         data => {
           if(data != null){
@@ -104,13 +113,23 @@ export class ClientComponent implements OnInit {
             this.chat_bot_event();
           }
           else{
+            this.chatService.setChat(data);
             this.findChat = false;
+            this.presentation_event();
           }
         },
         error => {
           console.log(error);
         }
-      );      
+      );
+      this.chatService.userByToken(this.tokenService.getToken()).subscribe(
+        data => {
+           this.user = data
+        },
+        error => {
+          console.log(error);
+        }
+      );            
     }
   }
 
@@ -189,7 +208,7 @@ export class ClientComponent implements OnInit {
     description: '',
     created_by: null,
     created_at: this.currentDate,
-    updated_by: null,
+    updated_by: 0,
     updated_at: this.currentDate,
     value1: '',
     value2: 0,
@@ -202,8 +221,8 @@ export class ClientComponent implements OnInit {
     id: 0,
     topic: '',
     description: '',
-    status: undefined,
-    user: undefined,
+    status: null,
+    user: null,
     created_by: null,
     created_at: '',
     updated_by: null,
@@ -221,17 +240,17 @@ export class ClientComponent implements OnInit {
     {
       this.buttonNext = true;   
     };
-    this.question_index = id-1;
-    console.log(this.answers[id-1].id);
-    this.chatService.deleteAnswer(this.answers[id-1].id).subscribe(
-      data => {
-        console.log(data);
-        console.log("borrado");
-      },
-      err => {
-        console.log(err);
-      }
-    );
+    // this.question_index = id-1;
+    // console.log(this.answers[id-1].id);
+    // this.chatService.deleteAnswer(this.answers[id-1].id).subscribe(
+    //   data => {
+    //     console.log(data);
+    //     console.log("borrado");
+    //   },
+    //   err => {
+    //     console.log(err);
+    //   }
+    // );
   }
 
   nextQuestion(id:number): void{
@@ -247,18 +266,21 @@ export class ClientComponent implements OnInit {
       this.buttonChatbot = true;
       this.buttonNext = false;
     };
-    this.answer.value1 = this.options.description;
-    this.answer.options = this.options;
-    this.chatService.saveAnswer(this.answer).subscribe(
-      data => {
-        console.log(data);
-        this.answer = data;
-        this.answers.push(this.answer);
-      },
-      err => {
-        console.log(err);
-      }
-    );
+    // this.answer.created_by = this.user;
+    // this.answer.updated_by = this.user.id;
+    // this.answer.value1 = this.options.description;
+    // this.answer.options = this.options;
+    // console.log(this.answer);
+    // this.chatService.saveAnswer(this.answer).subscribe(
+    //   data => {
+    //     console.log(data);
+    //     this.answer = data;
+    //     this.answers.push(this.answer);
+    //   },
+    //   err => {
+    //     console.log(err);
+    //   }
+    // );
     this.question_index = id+1;
   }
 

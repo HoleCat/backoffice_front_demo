@@ -3,8 +3,7 @@
     <table class="table table-dark">
       <thead>
         <tr>
-          <th scope="col">Id_Chatbot</th>
-          <th scope="col">Id_Chatbot_question</th>
+          <th scope="col">Id_Question</th>
           <th scope="col">Description</th>
           <th scope="col">Status</th>
           <th scope="col">Order</th>
@@ -13,32 +12,31 @@
           <th scope="col">Updated_by</th>
           <th scope="col">Updated_at</th>
           <th scope="col">Question_type</th>
+          <!-- <th scope="col">Accion</th>
           <th scope="col">Accion</th>
-          <th scope="col">Accion</th>
-          <th scope="col">Accion</th>
+          <th scope="col">Accion</th> -->
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let chatbot_question of chatbot_questions">
-          <td>{{chatbot_question.chatbot.id}}</td>
-          <td>{{chatbot_question.id}}</td>
-          <td>{{chatbot_question.question.description}}</td>
-          <td>{{chatbot_question.question.status.description}}</td>
-          <td>{{chatbot_question.question.order_number}}</td>
-          <td>{{chatbot_question.question.created_by}}</td>
-          <td>{{chatbot_question.question.created_at}}</td>
-          <td>{{chatbot_question.question.updated_by}}</td>
-          <td>{{chatbot_question.question.updated_at}}</td>
-          <td>{{chatbot_question.question.question_type.description}}</td>
-          <td><button class="btn btn-outline-warning" (click)="cargarOptions(chatbot_question.question.id)"><i class="far fa-edit"></i>Agregar Opcion</button></td>
-          <td><button class="btn btn-outline-warning" (click)="subirQuestion(chatbot_question.question)"><i class="far fa-edit"></i>Subir</button></td>
-          <td><button class="btn btn-outline-warning" (click)="bajarQuestion(chatbot_question.question)"><i class="far fa-edit"></i>Bajar</button></td>
+        <tr *ngFor="let question of chatbot.questions">
+          <td>{{question.id}}</td>
+          <td>{{question.description}}</td>
+          <td>{{question.status.description}}</td>
+          <td>{{question.order_number}}</td>
+          <td>{{question.created_by.userName}}</td>
+          <td>{{question.created_at}}</td>
+          <td>{{question.updated_by.userName}}</td>
+          <td>{{question.updated_at}}</td>
+          <td>{{question.question_type.description}}</td>
+          <td><button class="btn btn-outline-warning" (click)="cargarOptions(question.id)"><i class="far fa-edit"></i>Agregar Opcion</button></td>
+          <!--<td><button class="btn btn-outline-warning" (click)="subirQuestion(question)"><i class="far fa-edit"></i>Subir</button></td>
+          <td><button class="btn btn-outline-warning" (click)="bajarQuestion(question)"><i class="far fa-edit"></i>Bajar</button></td> -->
           <!-- respuesta -> id_chatbot y id_pregunta -->
         </tr>
       </tbody>
     </table>
      
-    <div>
+    <!-- <div>
       <h2>Pregunta</h2>
       {{question_types.description}}
       <form [formGroup]="formQuestion" class="flex mx-auto flex-col" (ngSubmit)="questionRegister()">
@@ -61,10 +59,10 @@
           </div>
         </div>
       </form>
-    </div>
+    </div> -->
     <div>
       <h2>Option</h2>
-      <table class="table table-dark">
+      <!-- <table class="table table-dark">
         <thead>
           <tr>
             <th scope="col">Id_question</th>
@@ -91,10 +89,10 @@
             <td>{{question_option.option.option_type.description}}</td>
             <td><button class="btn btn-outline-warning" (click)="subirOptions(chatbot_question.option)"><i class="far fa-edit"></i>Subir</button></td>
             <td><button class="btn btn-outline-warning" (click)="bajarOptions(chatbot_question.option)"><i class="far fa-edit"></i>Bajar</button></td>
-            <!-- respuesta -> id_chatbot y id_pregunta -->
+            respuesta -> id_chatbot y id_pregunta 
           </tr>
         </tbody>
-      </table>
+      </table> -->
      <div>
       
       <form [formGroup]="formOption" class="flex mx-auto flex-col" (ngSubmit)="optionRegister()">
