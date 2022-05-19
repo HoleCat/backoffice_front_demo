@@ -95,6 +95,20 @@ export class MessageClientComponent implements OnInit {
     updated_at: this.currentDate,
   };
 
+  user: User = {
+    id: 0,
+    name: '',
+    last_name: '',
+    userName: '',
+    email: '',
+    password: '',
+    document_number: '',
+    phone: '',
+    photo: '',
+    created_at: '',
+    updated_at: ''
+  };
+
   serviceClientSubscription: Subscription;
   ngOnInit(): void {
     
@@ -110,6 +124,15 @@ export class MessageClientComponent implements OnInit {
       this.userName = this.tokenService.getUserName();
       this.userData.senderName = this.userName; 
 
+      this.chatService.userByToken(this.tokenService.getToken()).subscribe(
+        data => {
+          this.user = data;
+        },
+        err => {
+          console.log(err);
+        }
+      );  
+
       this.client = new Client();
       
       this.client.webSocketFactory = () =>{
@@ -122,23 +145,13 @@ export class MessageClientComponent implements OnInit {
 
           if(this.clientComponent.findChat == false){
 
+            console.log("hola");
             //Arreglar para el token
-            this.chatService.userByUsername(this.userName).subscribe(
-              data => {
-                this.chatService.setChat({...this.chat,user: data,sender_name: this.userName, topic: "Hola", created_by: data, updated_by: data,updated_at: this.currentDate, created_at: this.currentDate, status: this.status});
-                // this.chat.user = data;
-                // this.chat.sender_name = this.userName;
-                // this.chat.topic = "Hola";
-                //cambios
-                this.saveChat(this.chat);
-                console.log("Client.component" + this.clientComponent.findChat);
-                console.log(this.chat);
-              },
-              err => {
-                console.log(err);
-              }
-            );
-            
+
+            this.chatService.setChat({...this.chat,user: this.user,sender_name: this.userName, topic: "Hola", created_by: this.user, updated_by: this.user,updated_at: this.currentDate, created_at: this.currentDate, status: this.status});
+            this.saveChat(this.chat);
+            console.log("Client.component" + this.clientComponent.findChat);
+            console.log(this.chat);
           }
           else
           {
@@ -209,17 +222,17 @@ export class MessageClientComponent implements OnInit {
     );
   }
 
-  findChat(token: string){
-    this.chatService.chatByToken(token).subscribe(
-      (data:any) => {
-        this.chat = data;
-        console.log('chat find: ',  this.chat);
-      },
-      (error:any) => {
-        console.log('chat error : ', error);
-      }
-    );
-  }
+  // findChat(token: string){
+  //   this.chatService.chatByToken(token).subscribe(
+  //     (data:any) => {
+  //       this.chat = data;
+  //       console.log('chat find: ',  this.chat);
+  //     },
+  //     (error:any) => {
+  //       console.log('chat error : ', error);
+  //     }
+  //   );
+  // }
 
   //Se necesita para el funcionamiento del privado
   callBackPublicMessage = (payload:any) => {
@@ -255,6 +268,9 @@ export class MessageClientComponent implements OnInit {
         message: this.userData.message,
         status: "MESSAGE"
       };
+      console.log(this.user);
+      this.message.created_by = this.user;
+      this.message.updated_by = this.user;
       this.message.message = this.userData.message;
       this.saveMessage(this.message);
       this.privateChats.get(this.userData.senderName).push(chatMessage);

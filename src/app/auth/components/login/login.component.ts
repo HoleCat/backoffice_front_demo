@@ -99,7 +99,7 @@ export class LoginComponent implements OnInit {
         this.tokenService.setUserName(data.userName);
         this.tokenService.setAuthorities(data.authorities);
         this.roles = data.authorities;
-        this.router.navigate(["/dashboard/my-chat/index"])
+        this.router.navigate(["/dashboard/my-chat/index"]);
       },
       err =>{
         this.isLogged = false;

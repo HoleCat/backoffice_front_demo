@@ -3,8 +3,7 @@
     <table class="table table-dark">
       <thead>
         <tr>
-          <th scope="col">Id_Chatbot</th>
-          <th scope="col">Id_Chatbot_question</th>
+          <th scope="col">Id_Question</th>
           <th scope="col">Description</th>
           <th scope="col">Status</th>
           <th scope="col">Order</th>
@@ -13,32 +12,31 @@
           <th scope="col">Updated_by</th>
           <th scope="col">Updated_at</th>
           <th scope="col">Question_type</th>
+          <!-- <th scope="col">Accion</th>
           <th scope="col">Accion</th>
-          <th scope="col">Accion</th>
-          <th scope="col">Accion</th>
+          <th scope="col">Accion</th> -->
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let chatbot_question of chatbot_questions">
-          <td>{{chatbot_question.chatbot.id}}</td>
-          <td>{{chatbot_question.id}}</td>
-          <td>{{chatbot_question.question.description}}</td>
-          <td>{{chatbot_question.question.status.description}}</td>
-          <td>{{chatbot_question.question.order_number}}</td>
-          <td>{{chatbot_question.question.created_by}}</td>
-          <td>{{chatbot_question.question.created_at}}</td>
-          <td>{{chatbot_question.question.updated_by}}</td>
-          <td>{{chatbot_question.question.updated_at}}</td>
-          <td>{{chatbot_question.question.question_type.description}}</td>
-          <td><button class="btn btn-outline-warning" (click)="cargarOptions(chatbot_question.question.id)"><i class="far fa-edit"></i>Agregar Opcion</button></td>
-          <td><button class="btn btn-outline-warning" (click)="subirQuestion(chatbot_question.question)"><i class="far fa-edit"></i>Subir</button></td>
-          <td><button class="btn btn-outline-warning" (click)="bajarQuestion(chatbot_question.question)"><i class="far fa-edit"></i>Bajar</button></td>
-          <!-- respuesta -> id_chatbot y id_pregunta -->
+        <tr *ngFor="let question of chatbot.questions">
+          <td>{{question.id}}</td>
+          <td>{{question.description}}</td>
+          <td>{{question.status.description}}</td>
+          <td>{{question.order_number}}</td>
+          <td>{{question.created_by.userName}}</td>
+          <td>{{question.created_at}}</td>
+          <td>{{question.updated_by.userName}}</td>
+          <td>{{question.updated_at}}</td>
+          <td>{{question.question_type.description}}</td>
+          <td><button class="btn btn-outline-warning" (click)="cargarOptions(question.id)"><i class="far fa-edit"></i>Agregar Opcion</button></td>
+          <td><button class="btn btn-outline-warning" (click)="subirQuestion(question)"><i class="far fa-edit"></i>Subir</button></td>
+          <td><button class="btn btn-outline-warning" (click)="bajarQuestion(question)"><i class="far fa-edit"></i>Bajar</button></td>
+          <!-- respuesta id_chatbot y id_pregunta -->
         </tr>
       </tbody>
     </table>
      
-    <div>
+    <!-- <div>
       <h2>Pregunta</h2>
       {{question_types.description}}
       <form [formGroup]="formQuestion" class="flex mx-auto flex-col" (ngSubmit)="questionRegister()">
@@ -61,14 +59,13 @@
           </div>
         </div>
       </form>
-    </div>
+    </div> -->
     <div>
       <h2>Option</h2>
       <table class="table table-dark">
         <thead>
           <tr>
-            <th scope="col">Id_question</th>
-            <th scope="col">Id_question_options</th>
+            <th scope="col">Id_options</th>
             <th scope="col">Description</th>
             <th scope="col">Status</th>
             <th scope="col">Created_by</th>
@@ -76,28 +73,27 @@
             <th scope="col">Updated_by</th>
             <th scope="col">Updated_at</th>
             <th scope="col">Option_type</th>
-            <th scope="col">Accion</th>
+            <!-- <th scope="col">Accion</th> -->
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let question_option of question_options">
-            <td>{{question_option.question.id}}</td>
-            <td>{{question_option.id}}</td>
-            <td>{{question_option.option.description}}</td>
-            <td>{{question_option.option.created_by}}</td>
-            <td>{{question_option.option.created_at}}</td>
-            <td>{{question_option.option.updated_by}}</td>
-            <td>{{question_option.option.updated_at}}</td>
-            <td>{{question_option.option.option_type.description}}</td>
-            <td><button class="btn btn-outline-warning" (click)="subirOptions(chatbot_question.option)"><i class="far fa-edit"></i>Subir</button></td>
-            <td><button class="btn btn-outline-warning" (click)="bajarOptions(chatbot_question.option)"><i class="far fa-edit"></i>Bajar</button></td>
-            <!-- respuesta -> id_chatbot y id_pregunta -->
+          <tr *ngFor="let option of question.options">
+            <td>{{option.id}}</td>
+            <td>{{option.description}}</td>
+            <td>{{option.created_by.userName}}</td>
+            <td>{{option.created_at}}</td>
+            <td>{{option.updated_by.userName}}</td>
+            <td>{{option.updated_at}}</td>
+            <td>{{option.option_type.description}}</td>
+            <!-- <td><button class="btn btn-outline-warning" (click)="subirOptions(chatbot_question.option)"><i class="far fa-edit"></i>Subir</button></td>
+            <td><button class="btn btn-outline-warning" (click)="bajarOptions(chatbot_question.option)"><i class="far fa-edit"></i>Bajar</button></td> -->
+            <!-- respuesta -> id_chatbot y id_pregunta  -->
           </tr>
         </tbody>
       </table>
      <div>
       
-      <form [formGroup]="formOption" class="flex mx-auto flex-col" (ngSubmit)="optionRegister()">
+      <!-- <form [formGroup]="formOption" class="flex mx-auto flex-col" (ngSubmit)="optionRegister()">
         <div fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="center center">
             <div fxFlex="20" fxLayout="column">
                 <h1>Nueva Opción</h1>
@@ -116,7 +112,7 @@
                 <button mat-raised-button color="primary">Registrar</button>
           </div>
         </div>
-      </form>
+      </form> -->
     </div>
   </div>  
 </div>
