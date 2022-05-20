@@ -28,3 +28,36 @@
     </tr>
   </tbody>
 </table> 
+
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="chats" class="w-full">
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef> id </th>
+      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="topic">
+      <th mat-header-cell *matHeaderCellDef> topic </th>
+      <td mat-cell *matCellDef="let element"> {{element.topic}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef> description </th>
+      <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator 
+    showFirstLastButtons 
+    aria-label="Select page of chats"
+    (PageEvent)="PageEvent($event)"
+    [length]="chats.length"
+    [pageIndex]="0"
+    [pageSize]="1"
+    [pageSizeOptions]="[1, 2, 3, 5]">
+  </mat-paginator>
+</div>

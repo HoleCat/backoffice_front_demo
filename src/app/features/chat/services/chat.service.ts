@@ -39,8 +39,8 @@ export class ChatService {
     return this.httpClient.get<Chat[]>('http://localhost:8092/chat/list');
   }
 
-  public listChatsByStatus(status: string): Observable<Chat[]> {
-    return this.httpClient.get<Chat[]>(`http://localhost:8092/chat/listByStatus/${status}`);
+  public listChatsByStatus(status: number): Observable<any> {
+    return this.httpClient.get<any>(`http://localhost:8092/chat/listByStatus/${status}`);
   }
 
   public chatByToken(token: string): Observable<Chat> {

@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Chat } from 'src/app/features/chat/interfaces/Chat';
 import { ChatService } from 'src/app/features/chat/services/chat.service';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-index',
@@ -8,6 +10,7 @@ import { ChatService } from 'src/app/features/chat/services/chat.service';
   styleUrls: ['./index.component.css']
 })
 export class IndexComponent implements OnInit {
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   
   chats: Chat[] = [];
 
@@ -21,8 +24,15 @@ export class IndexComponent implements OnInit {
     
   }
 
+  displayedColumns: any[] = ['id','topic','description']
+
+  PageEvent($event) {
+    console.log("hola");
+    alert($event);
+  }
+
   cargarChats(): void {
-    this.chatService.listChatsByStatus("ACTIVO").subscribe(
+    this.chatService.listChatsByStatus(3).subscribe(
       data => {
         this.chats = data;
       },
