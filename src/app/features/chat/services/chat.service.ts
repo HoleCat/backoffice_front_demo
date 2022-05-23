@@ -6,6 +6,7 @@ import { Answer } from '../interfaces/Answer';
 import { Chat } from '../interfaces/Chat';
 import { Chatbot } from '../interfaces/Chatbot';
 import { Message } from '../interfaces/Message';
+import { Page } from '../interfaces/Page';
 import { Question } from '../interfaces/Question';
 import { User } from '../interfaces/User';
 
@@ -39,8 +40,9 @@ export class ChatService {
     return this.httpClient.get<Chat[]>('http://localhost:8092/chat/list');
   }
 
-  public listChatsByStatus(status: number): Observable<any> {
-    return this.httpClient.get<any>(`http://localhost:8092/chat/listByStatus/${status}`);
+  public listChatsByStatus(status: number, page: number,pageSize: number): Observable<Page> {
+    return this.httpClient.get<Page>(`http://localhost:8092/chat/listByStatus/${status}?page=${page}&pageSize=${pageSize}`);
+    // return this.httpClient.post<Page>(`http://localhost:8092/chat/listByStatus/`, obj);
   }
 
   public chatByToken(token: string): Observable<Chat> {

@@ -26,14 +26,14 @@ export class IndexComponent implements OnInit {
   }
 
   cargarChats(): void {
-    this.chatService.listChatsByStatus(2).subscribe(
-      data => {
-        this.chats = data;
-      },
-      err => {
-        console.log(err);
-      }
-    );
+    // this.chatService.listChatsByStatus(2).subscribe(
+    //   data => {
+    //     this.chats = data;
+    //   },
+    //   err => {
+    //     console.log(err);
+    //   }
+    // );
   }
 
 }
