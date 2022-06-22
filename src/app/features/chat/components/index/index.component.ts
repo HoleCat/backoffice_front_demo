@@ -5,6 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Chat } from '../../interfaces/Chat';
+import { Page } from '../../interfaces/Page';
 
 @Component({
   selector: 'app-index',
@@ -13,7 +14,20 @@ import { Chat } from '../../interfaces/Chat';
 })
 export class IndexComponent implements OnInit {
 
-  chats: Chat[] = [];
+  pages: Page = {
+    content: [],
+    pageable: null,
+    last: false,
+    totalPages: 0,
+    totalElements: 0,
+    size: 0,
+    number: 0,
+    sort: null,
+    first: false,
+    numberOfElements: 0,
+    empty: false
+  };
+  chats: Chat[] =[];
 
   constructor(
     private chatService: ChatService
@@ -26,14 +40,15 @@ export class IndexComponent implements OnInit {
   }
 
   cargarChats(): void {
-    // this.chatService.listChatsByStatus(2).subscribe(
-    //   data => {
-    //     this.chats = data;
-    //   },
-    //   err => {
-    //     console.log(err);
-    //   }
-    // );
+    this.chatService.listChatsByStatus(2, 0, 1).subscribe(
+      data => {
+        this.pages = data;
+        console.log(this.chats);
+      },
+      err => {
+        console.log(err);
+      }
+    );
   }
 
 }

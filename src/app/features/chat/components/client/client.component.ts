@@ -159,6 +159,22 @@ export class ClientComponent implements OnInit {
   chat_bot_event():void {
     this.page_index = 2;
     this.cargarChatbots();
+    this.answer.created_by = this.user;
+    this.answer.updated_by = this.user;
+    this.answer.value1 = this.options.description;
+    this.answer.options = this.options;
+    console.log(this.answer);
+    this.chatService.saveAnswer(this.answer).subscribe(
+      data => {
+        this.answer = data;
+        this.answers.push(this.answer);
+        console.log(data);
+        console.log("RESPUESTA CREADA")
+      },
+      err => {
+        console.log(err);
+      }
+    );
   }
 
   chat_event():void {
@@ -208,7 +224,7 @@ export class ClientComponent implements OnInit {
     description: '',
     created_by: null,
     created_at: this.currentDate,
-    updated_by: 0,
+    updated_by: null,
     updated_at: this.currentDate,
     value1: '',
     value2: 0,
@@ -240,17 +256,17 @@ export class ClientComponent implements OnInit {
     {
       this.buttonNext = true;   
     };
-    // this.question_index = id-1;
-    // console.log(this.answers[id-1].id);
-    // this.chatService.deleteAnswer(this.answers[id-1].id).subscribe(
-    //   data => {
-    //     console.log(data);
-    //     console.log("borrado");
-    //   },
-    //   err => {
-    //     console.log(err);
-    //   }
-    // );
+    this.question_index = id-1;
+    console.log(this.answers[id-1].id);
+    this.chatService.deleteAnswer(this.answers[id-1].id).subscribe(
+      data => {
+        console.log(data);
+        console.log("borrado");
+      },
+      err => {
+        console.log(err);
+      }
+    );
   }
 
   nextQuestion(id:number): void{
@@ -266,21 +282,22 @@ export class ClientComponent implements OnInit {
       this.buttonChatbot = true;
       this.buttonNext = false;
     };
-    // this.answer.created_by = this.user;
-    // this.answer.updated_by = this.user.id;
-    // this.answer.value1 = this.options.description;
-    // this.answer.options = this.options;
-    // console.log(this.answer);
-    // this.chatService.saveAnswer(this.answer).subscribe(
-    //   data => {
-    //     console.log(data);
-    //     this.answer = data;
-    //     this.answers.push(this.answer);
-    //   },
-    //   err => {
-    //     console.log(err);
-    //   }
-    // );
+    this.answer.created_by = this.user;
+    this.answer.updated_by = this.user;
+    this.answer.value1 = this.options.description;
+    this.answer.options = this.options;
+    console.log(this.answer);
+    this.chatService.saveAnswer(this.answer).subscribe(
+      data => {
+        this.answer = data;
+        this.answers.push(this.answer);
+        console.log(data);
+        console.log("RESPUESTA CREADA")
+      },
+      err => {
+        console.log(err);
+      }
+    );
     this.question_index = id+1;
   }
 
