@@ -124,7 +124,7 @@ export class ClientComponent implements OnInit {
       );
       this.chatService.userByToken(this.tokenService.getToken()).subscribe(
         data => {
-           this.user = data
+           this.user.id = data.id
         },
         error => {
           console.log(error);
@@ -159,10 +159,10 @@ export class ClientComponent implements OnInit {
   chat_bot_event():void {
     this.page_index = 2;
     this.cargarChatbots();
-    this.answer.created_by = this.user;
-    this.answer.updated_by = this.user;
+    this.answer.created_by.id = this.user.id;
+    this.answer.updated_by.id = this.user.id;
     this.answer.value1 = this.options.description;
-    this.answer.options = this.options;
+    this.answer.options.id = this.options.id;
     console.log(this.answer);
     this.chatService.saveAnswer(this.answer).subscribe(
       data => {
@@ -282,10 +282,10 @@ export class ClientComponent implements OnInit {
       this.buttonChatbot = true;
       this.buttonNext = false;
     };
-    this.answer.created_by = this.user;
-    this.answer.updated_by = this.user;
+    this.answer.created_by.id = this.user.id;
+    this.answer.updated_by.id = this.user.id;
     this.answer.value1 = this.options.description;
-    this.answer.options = this.options;
+    this.answer.options.id = this.options.id;
     console.log(this.answer);
     this.chatService.saveAnswer(this.answer).subscribe(
       data => {

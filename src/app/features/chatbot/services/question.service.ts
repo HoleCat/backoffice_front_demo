@@ -17,8 +17,8 @@ export class QuestionService {
     return this.httpClient.get<Chatbot_question[]>(`http://localhost:8092/chatbot_question/list/${id}`);
   }
 
-  public saveQuestion(obj: Question): Observable<any>{
-    return this.httpClient.post('http://localhost:8092/question/create', obj);
+  public saveQuestion(id: number, obj: Question): Observable<any>{
+    return this.httpClient.post(`http://localhost:8092/question/create/${id}`, obj);
   }
 
   public saveQuestionOptions(obj: Question_options): Observable<any>{
