@@ -4,8 +4,8 @@
         <h4>{{message.message}}</h4>
      </div>
 
-    <div class="w-full bg-white-50" *ngFor="let chat of privateChats | keyvalue">
-        <div>{{chat | json}}</div>
+    <div class="w-full bg-white-50" *ngFor="let chat of privateChats_ ">
+        <div>{{chat.message}}</div>
         <!-- <div>{{chat.value.senderName}} {{chat.value.message}}</div> -->
         <!-- <div *ngIf="chat.senderName === userData.username">{{chat.senderName}} -- {{chat.message}}</div>
         <div class="bg-white-200" *ngIf="chat.senderName !== userData.username">{{chat.senderName}} -- {{chat.message}}</div>    

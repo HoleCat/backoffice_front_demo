@@ -59,9 +59,9 @@ export class ShowComponent implements OnInit {
   question_status: Status = {
     id: 2,
     description: '',
-    created_by: 0,
+    created_by: null,
     created_at: '',
-    updated_by: 0,
+    updated_by: null,
     updated_at: ''
   }
   user: User = {
@@ -120,7 +120,11 @@ export class ShowComponent implements OnInit {
     this.formOption=this.fb.group({
       //codigo:[,[Validators.required]],
       description: ['',[Validators.required]],
-      option_type:['',[Validators.required]]
+      option_type:['',[Validators.required]],
+      created_by: [this.user,[Validators.required]],
+      created_at: [this.currentDate,[Validators.required]],
+      updated_by: [this.user,[Validators.required]],
+      updated_at: [this.currentDate,[Validators.required]]
     });
   }
 
@@ -173,13 +177,10 @@ export class ShowComponent implements OnInit {
   chatbotSubscription: Subscription
   optionRegister(): void{
     if(this.chatbotSubscription != undefined) (this.chatbotSubscription.unsubscribe());
-    this.chatbotSubscription = this.optionsService.saveOption(this.formOption.value).subscribe(
+    this.chatbotSubscription = this.optionsService.saveOption(this.question.id,this.formOption.value).subscribe(
       (data:any) => {
         console.log('option registrado : ', data);
         console.log('id : ' + this.question.id)
-        this.question_option.option = data;
-        this.question_option.question = this.question;
-        this.question_optionsRegister();
       },
       (error:any) => {
         console.log('option error : ', error);

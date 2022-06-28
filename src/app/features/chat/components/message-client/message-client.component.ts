@@ -31,7 +31,6 @@ export class MessageClientComponent implements OnInit {
   //   updated_by: 0,
   //   updated_at: null
   // };
-  
   //para el token
   isLogged = false;
   userName = '';
@@ -41,6 +40,7 @@ export class MessageClientComponent implements OnInit {
   connected: boolean = false;
   publicChats = [];
   privateChats = new Map();
+  privateChats_ = [];
   currentDate = new Date();
 
   messages: Message[] = []; 
@@ -250,13 +250,14 @@ export class MessageClientComponent implements OnInit {
   callBackMessage = (payload:any) => {
     let payloadData = JSON.parse(payload.body);
     console.log('callBackMessage: ', payload);
-    if(this.privateChats.get(payloadData.senderName)){
-      this.privateChats.get(payloadData.senderName).push(payloadData);
-    }else{
-      let list = [];
-      list.push(payloadData);
-      this.privateChats.set(payloadData.senderName, list);
-    }
+    this.privateChats_.push(payloadData);
+    // if(this.privateChats.get(payloadData.senderName)){
+    //   this.privateChats.get(payloadData.senderName).push(payloadData);
+    // }else{
+    //   let list = [];
+    //   list.push(payloadData);
+    //   this.privateChats.set(payloadData.senderName, list);
+    // }
      
   }
 
@@ -274,6 +275,7 @@ export class MessageClientComponent implements OnInit {
       this.message.message = this.userData.message;
       this.saveMessage(this.message);
       this.privateChats.get(this.userData.senderName).push(chatMessage);
+      this.privateChats_.push(chatMessage);
       
       this.client.publish({destination: '/app/private-message', body: JSON.stringify(chatMessage)});
       console.log(chatMessage);

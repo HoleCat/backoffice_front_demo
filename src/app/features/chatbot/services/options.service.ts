@@ -15,8 +15,8 @@ export class OptionsService {
     return this.httpClient.get<Question_options[]>(`http://localhost:8092/question_options/list/${id}`);
   }
 
-  public saveOption(obj: Options): Observable<any>{
-    return this.httpClient.post('http://localhost:8092/options/create', obj);
+  public saveOption(id: number,obj: Options): Observable<any>{
+    return this.httpClient.post(`http://localhost:8092/options/create/${id}`, obj);
   }
 
   public updateSubirOption(id: number, obj: Options): Observable<any> {
